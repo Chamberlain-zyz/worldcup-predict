@@ -79,6 +79,53 @@
     text-shadow:0 0 22px rgba(255,211,77,.45)}
   .result-tag{font-size:14px;opacity:.8;margin-top:-6px;letter-spacing:6px}
 
+  /* ---------- 比赛结束：结果卡片 ---------- */
+  .final-result{
+    display:flex;align-items:center;justify-content:center;gap:14px;
+    width:100%;max-width:520px;margin:6px 0 2px;
+  }
+  .final-team{
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+    min-width:104px;padding:10px 8px;border-radius:14px;
+    background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01));
+    border:1px solid rgba(255,255,255,.12);
+    transition:transform .25s,box-shadow .25s,border-color .25s;
+  }
+  .final-team.winner{
+    transform:scale(1.1);
+    border-color:rgba(255,211,77,.7);
+    box-shadow:0 0 26px rgba(255,211,77,.45),0 0 60px rgba(255,211,77,.18);
+  }
+  .final-team .fflag{width:62px;height:44px;object-fit:cover;border-radius:6px;
+    box-shadow:0 4px 12px rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.25)}
+  .final-team .fname{
+    font-size:clamp(16px,2.6vw,22px);font-weight:800;letter-spacing:.5px;
+    text-align:center;line-height:1.15;
+  }
+  .final-team.winner .fname{
+    color:var(--gold);text-shadow:0 0 14px rgba(255,211,77,.55);
+  }
+  .final-score{
+    font-size:clamp(46px,9vw,72px);font-weight:900;letter-spacing:2px;
+    font-variant-numeric:tabular-nums;line-height:1;
+    color:#fff;text-shadow:0 0 22px rgba(255,211,77,.55),0 4px 18px rgba(0,0,0,.6);
+    display:flex;align-items:center;gap:10px;
+  }
+  .final-score .pen{
+    font-size:.4em;font-weight:700;opacity:.85;color:var(--gold);
+    display:flex;flex-direction:column;align-items:center;line-height:1.1;
+  }
+  .final-score .pen small{font-size:.62em;opacity:.7;font-weight:600;letter-spacing:1px}
+  .final-tag{
+    display:inline-block;margin-top:10px;padding:4px 16px;border-radius:20px;
+    font-size:13px;font-weight:800;letter-spacing:4px;
+    background:rgba(255,211,77,.14);border:1px solid rgba(255,211,77,.4);color:var(--gold);
+  }
+  .final-winner-line{
+    margin-top:8px;font-size:clamp(15px,2.4vw,19px);font-weight:700;opacity:.92;
+    text-align:center;
+  }
+
   button{
     cursor:pointer;border:none;outline:none;
     font-family:inherit;font-weight:700;letter-spacing:1px;
@@ -320,6 +367,9 @@
 
   // ---------- 配置 / 常量 ----------
   // 比赛流程
+  const ALLOW_EXTRA = true;          // 是否允许加时赛（小组赛=false：90' 平局即终场，不进加时）
+  const ALLOW_PENS = true;           // 是否允许点球大战（小组赛=false；仅在加时结束仍平局时触发）
+  const FORCE_EXTRA = false;         // 测试开关：true=任何比分 90' 结束都强制进入加时赛
   const FORCE_PENS = false;          // 测试开关：true=任何比分结束都进点球；false=仅 120' 仍平局进点球
   const T_REG = 60,                  // 常规时间映射秒数（0~90'）
         T_EXTRA = 20,                // 加时映射秒数（90~120'，与常规同比例 0.667s/min）
@@ -373,7 +423,7 @@
   // cA/cB 可选，不传则随机抽两队
   function newMatch(cA, cB){
     if(!cA || !cB){ const [a,b]=pickTwoCountries(); cA=a; cB=b; }
-    const goalCenter = Math.random()*Math.PI*2;      // 随机球门位置
+    const goalCenter = -Math.PI/2;                   // 球门固定在球场正上方
     const balls = [
       makeBall(cA, Math.random()*Math.PI*2, "#ff5a5a"),
       makeBall(cB, Math.random()*Math.PI*2, "#4aa3ff")
@@ -423,8 +473,10 @@
   }
 
   // 触发中圈开球 + 停顿：两球回中央，冻结 KICKOFF_PAUSE 秒（期间时钟与物理均暂停）
-  function kickoffPause(min){
+  // resetRot：仅在开场时刻（开场/下半场/加时/加时下半场）复位球场朝向，进球后不复位
+  function kickoffPause(min, resetRot){
     resetBallsToCenter();
+    if(resetRot) state.rot = 0;   // 开场：中线水平、球门回到正上方；进球后保持当前朝向继续旋转
     state.matchMin = min;
     state.freezeMin = min;
     const now = performance.now()/1000;
@@ -476,14 +528,20 @@
         // 常规时间结束
         if(FORCE_PENS){
           enterPens();                       // 测试开关：任何比分都直接进点球
-        } else if(state.scoreA === state.scoreB){
+        } else if(FORCE_EXTRA){
+          state.extra = true;
+          state.extraStart = now;            // 测试开关：强制进入加时
+          kickoffPause(90, true);            // 加时开球 + 停顿（复位球场朝向）
+          state.prevMin = 90;
+          return;
+        } else if(state.scoreA === state.scoreB && ALLOW_EXTRA){
           state.extra = true;
           state.extraStart = now;            // 平局 -> 加时
-          kickoffPause(90);                  // 加时开球 + 停顿
+          kickoffPause(90, true);            // 加时开球 + 停顿（复位球场朝向）
           state.prevMin = 90;
           return;
         } else {
-          state.finished = true;             // 分出胜负 -> 终场
+          state.finished = true;             // 分出胜负 / 平局且无加时（小组赛）-> 终场
         }
       } else {
         state.matchMin = accel(0, 90, t/T_REG);
@@ -493,8 +551,10 @@
       if(te >= T_EXTRA){
         te = T_EXTRA;
         state.matchMin = 120;
-        // 加时结束：平局 -> 点球；FORCE_PENS 亦强制点球；否则终场
-        if(state.scoreA === state.scoreB || FORCE_PENS){
+        // 加时结束：平局且允许点球 -> 点球；FORCE_PENS 亦强制点球；否则终场（含平局且无点球）
+        if(FORCE_PENS){
+          enterPens();
+        } else if(state.scoreA === state.scoreB && ALLOW_PENS){
           enterPens();
         } else {
           state.finished = true;
@@ -513,14 +573,14 @@
     // —— 半场 45' / 加时半场 105'：跨过即中圈开球 + 停顿 ——
     if(!state.extra){
       if(state.prevMin < 45 && state.matchMin >= 45){
-        kickoffPause(45);
+        kickoffPause(45, true);              // 下半场开场（复位球场朝向）
         flashMsg("下半场", KICKOFF_PAUSE*1000);   // 停顿期间中央显示文字
         state.prevMin = 45;
         return;
       }
     } else {
       if(state.prevMin < 105 && state.matchMin >= 105){
-        kickoffPause(105);
+        kickoffPause(105, true);            // 加时下半场开场（复位球场朝向）
         state.prevMin = 105;
         return;
       }
@@ -541,7 +601,7 @@
     for(const b of balls){ b.spin += b.spinV*dt; }
     if(state.goalFlash>0) state.goalFlash -= dt;
 
-    // 外圈整体旋转
+    // 外圈整体旋转：草地/中线/中圈随球场转动，球门始终固定在正上方
     state.rot += dt * 0.35;   // 弧度/秒，顺时针缓慢旋转
     state.prevMin = state.matchMin;
   }
@@ -1071,28 +1131,59 @@
     // 点球大战结束
     if(state.pens){
       const a=state.scoreA, b=state.scoreB, pa=state.pens.penA, pb=state.pens.penB;
+      const [cA,cB]=state.countries;
       const w=state.pens.winner;
       const title=`${state.countries[w][2]} ${zhName(state.countries[w])} 获胜（点球）`;
       elOverlayTitle.textContent="点球大战结束 ⚽";
       elOverlayBody.innerHTML =
-        `<div class="result-line">${a}(${pa}) : ${b}(${pb})</div>
-         <div class="result-tag">点球 PENS</div>
-         <div style="margin-top:10px;font-size:14px;opacity:.85">${title}</div>`;
+        `<div class="final-result">
+           <div class="final-team ${w===0?'winner':''}">
+             ${flagImgHTML(cA[1], cA[2])}
+             <div class="fname">${zhName(cA)}</div>
+           </div>
+           <div class="final-score">
+             ${a}<span class="pen"><small>点球</small>${pa}</span>
+             <span class="sep">:</span>
+             ${b}<span class="pen"><small>点球</small>${pb}</span>
+           </div>
+           <div class="final-team ${w===1?'winner':''}">
+             ${flagImgHTML(cB[1], cB[2])}
+             <div class="fname">${zhName(cB)}</div>
+           </div>
+         </div>
+         <div style="text-align:center">
+           <span class="final-tag">点球 PENS</span>
+         </div>
+         <div class="final-winner-line">${title}</div>`;
       elStartBtn.textContent="再来一局";
       elOverlay.classList.remove("hidden");
       applyPensScoreboard();   // 记分牌保留 常规分(点球分)
       return;
     }
     const a=state.scoreA, b=state.scoreB;
-    let title, tag;
-    if(a>b){ title=`${state.countries[0][2]} ${zhName(state.countries[0])} 获胜`; tag="WIN"; }
-    else if(b>a){ title=`${state.countries[1][2]} ${zhName(state.countries[1])} 获胜`; tag="WIN"; }
-    else { title="加时仍平局"; tag="DRAW"; }
+    const [cA,cB]=state.countries;
+    let winIdx = a>b ? 0 : (b>a ? 1 : -1);
+    const tag = winIdx>=0 ? "WIN" : "DRAW";
+    const title = winIdx>=0
+      ? `${state.countries[winIdx][2]} ${zhName(state.countries[winIdx])} 获胜`
+      : (state.extra ? "加时仍平局" : "常规时间平局");
     elOverlayTitle.textContent = state.extra ? "加时结束 ⚽" : "终场哨响 ⚽";
     elOverlayBody.innerHTML =
-      `<div class="result-line">${a} : ${b}</div>
-       <div class="result-tag">${tag}</div>
-       <div style="margin-top:10px;font-size:14px;opacity:.85">${title}</div>`;
+      `<div class="final-result">
+         <div class="final-team ${winIdx===0?'winner':''}">
+           ${flagImgHTML(cA[1], cA[2])}
+           <div class="fname">${zhName(cA)}</div>
+         </div>
+         <div class="final-score">${a}<span class="sep">:</span>${b}</div>
+         <div class="final-team ${winIdx===1?'winner':''}">
+           ${flagImgHTML(cB[1], cB[2])}
+           <div class="fname">${zhName(cB)}</div>
+         </div>
+       </div>
+       <div style="text-align:center">
+         <span class="final-tag">${tag}</span>
+       </div>
+       <div class="final-winner-line">${title}</div>`;
     elStartBtn.textContent="再来一局";
     elOverlay.classList.remove("hidden");
   }
@@ -1127,7 +1218,7 @@
     elOverlay.classList.add("hidden");
     state.realStart = performance.now()/1000;
     state.started = true;
-    kickoffPause(0);               // 开局中圈开球：球回中央 + 停顿 1 秒
+    kickoffPause(0, true);         // 开局中圈开球：球回中央 + 复位球场朝向 + 停顿 1 秒
     lastT = 0;
     if(rafId) cancelAnimationFrame(rafId);
     rafId = requestAnimationFrame(loop);
@@ -1284,7 +1375,7 @@
 
   // 初始：不显示任何国家，仅绘制空球场
   state = {
-    countries:[], balls:[], goalCenter: Math.random()*Math.PI*2,
+    countries:[], balls:[], goalCenter: -Math.PI/2,
     goalFlash:0, scoreA:0, scoreB:0, started:false, finished:false,
     extra:false, matchMin:0, rot:0
   };
