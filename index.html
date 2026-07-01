@@ -457,14 +457,14 @@
   // 中圈开球：两球置于球场中央两侧（随机中轴），各自朝外侧射出
   function resetBallsToCenter(){
     const balls = state.balls;
-    const ang = Math.random()*Math.PI*2;   // 中轴随机方向
     const off = BALL_R + 6;                 // 两球距中心的偏移
     for(let i=0;i<balls.length;i++){
-      const s = i===0 ? -1 : 1;             // 球0在负侧，球1在正侧
-      balls[i].x = CX + Math.cos(ang)*s*off;
-      balls[i].y = CY + Math.sin(ang)*s*off;
-      // 朝外侧射出（远离中心），略带随机扰动
-      const outDir = ang + (s<0 ? Math.PI : 0) + (Math.random()-0.5)*0.8;
+      const s = i===0 ? -1 : 1;             // 球0(A)在左，球1(B)在右
+      // 两球左右并排在中圈：位置固定，不随机，避免恰好对准球门一开场就进球
+      balls[i].x = CX + s*off;
+      balls[i].y = CY;
+      // 朝外侧水平射出（A 向左、B 向右），略带上下随机扰动让轨迹不平行
+      const outDir = (s<0 ? Math.PI : 0) + (Math.random()-0.5)*0.8;
       balls[i].vx = Math.cos(outDir)*TARGET_SP;
       balls[i].vy = Math.sin(outDir)*TARGET_SP;
       balls[i].spin = 0;
