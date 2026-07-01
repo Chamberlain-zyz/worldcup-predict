@@ -1,0 +1,11 @@
+# IDE
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 依赖与构建产物（如有）
+node_modules/
+dist/
+*.log
