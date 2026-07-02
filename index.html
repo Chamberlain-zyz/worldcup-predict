@@ -249,7 +249,7 @@
 </head>
 <body>
   <h1>⚽ 世界杯小游戏</h1>
-  <div class="subtitle">点击两侧对阵树选择比赛，再点「开始模拟」按钮开战；进球得分，90 分钟平局则加时至 120 分钟</div>
+  <div class="subtitle">点「开始模拟」按钮开战；进球得分，90 分钟平局则加时至 120 分钟</div>
 
   <div class="layout">
     <!-- 左：上半区对阵树 -->
@@ -298,14 +298,14 @@
         <div class="overlay" id="overlay">
           <h2 id="overlayTitle">⚽ 世界杯小游戏</h2>
           <div id="overlayBody" style="opacity:.85;font-size:14px;line-height:1.7">
-            点击两侧对阵树任一场比赛即可开战<br>或点下方按钮随机抽两队对战<br>进球需整球穿过门框、不碰立柱
+            点击两侧对阵树任一场比赛即可开战<br>或点下方按钮 / 按 <b>空格键</b> 随机抽两队对战<br>进球需整球穿过门框、不碰立柱
           </div>
           <button class="btn" id="startBtn">随机开球</button>
         </div>
       </div>
 
       <div class="final-seat">🏆 总决赛席位</div>
-      <div class="hint">物理弹球模拟 · 加速计时 · 平局加时至 120'</div>
+      <div class="hint">物理弹球模拟 · 加速计时 · 平局加时至 120' · 空格键开始</div>
     </main>
 
     <!-- 右：下半区对阵树 -->
@@ -1204,7 +1204,7 @@
          <span style="opacity:.5;font-size:14px;letter-spacing:2px">VS</span>
          ${flagImgHTML(cB[1],cB[2])}<span>${zhName(cB)}</span>
        </div>
-       <div style="opacity:.7;font-size:13px;margin-top:6px">点击下方按钮开始模拟</div>`;
+       <div style="opacity:.7;font-size:13px;margin-top:6px">点击下方按钮 / 按空格键开始模拟</div>`;
     elStartBtn.textContent = "开始模拟";
     elOverlay.classList.remove("hidden");
     draw();
@@ -1224,13 +1224,24 @@
     rafId = requestAnimationFrame(loop);
   }
 
-  elStartBtn.addEventListener("click", ()=>{
+  // 开始模拟：优先用已选定的两队，否则随机抽两队
+  function doStart(){
     if(pending){
       const [a,b]=pending; pending=null;
       start(a, b);
     } else {
       start(null, null);
     }
+  }
+  elStartBtn.addEventListener("click", doStart);
+
+  // 空格键开始模拟：仅当遮罩可见（未在比赛进行中）时生效，避免打断进行中的对局。
+  // preventDefault 既阻止页面滚动，也阻止焦点按钮（开始/对阵）原生的 space-click，避免重复触发。
+  window.addEventListener("keydown", (e)=>{
+    if(e.code!=="Space" && e.key!==" ") return;
+    if(elOverlay.classList.contains("hidden")) return;   // 比赛进行中：忽略
+    e.preventDefault();
+    doStart();
   });
 
   // ---------- 2026 美加墨世界杯淘汰赛对阵图 ----------
@@ -1265,13 +1276,13 @@
       {round:"32强赛", a:NED, b:MAR, winner:"b", scoreA:1, scoreB:1, penA:2, penB:3},
       {round:"32强赛", a:POR, b:CRO, winner:null},
       {round:"32强赛", a:ESP, b:AUT, winner:null},
-      {round:"32强赛", a:USA, b:BIH, winner:null},
-      {round:"32强赛", a:BEL, b:SEN, winner:null},
+      {round:"32强赛", a:USA, b:BIH, winner:"a", scoreA:2, scoreB:0},
+      {round:"32强赛", a:BEL, b:SEN, winner:"a", scoreA:3, scoreB:2},
       // 16 强赛（胜者占位）
       {round:"16强赛", a:PAR, b:FRA, winner:null},   // 巴拉圭(已晋级) vs 法国(已晋级)
       {round:"16强赛", a:CAN, b:MAR, winner:null},   // 加拿大(已晋级) vs 摩洛哥(已晋级)
       {round:"16强赛", a:TBD, b:TBD, winner:null},   // 葡萄牙/克罗地亚 vs 西班牙/奥地利
-      {round:"16强赛", a:TBD, b:TBD, winner:null},   // 美国/波黑 vs 比利时/塞内加尔
+      {round:"16强赛", a:USA, b:BEL, winner:null},   // 美国(已晋级) vs 比利时(已晋级)
       // 1/4 决赛
       {round:"1/4决赛", a:TBD, b:TBD, winner:null},
       {round:"1/4决赛", a:TBD, b:TBD, winner:null},
@@ -1283,14 +1294,14 @@
       {round:"32强赛", a:BRA, b:JPN, winner:"a", scoreA:2, scoreB:1},
       {round:"32强赛", a:CIV, b:NOR, winner:"b", scoreA:1, scoreB:2},
       {round:"32强赛", a:MEX, b:ECU, winner:"a", scoreA:2, scoreB:0},
-      {round:"32强赛", a:ENG, b:COD, winner:null},
+      {round:"32强赛", a:ENG, b:COD, winner:"a", scoreA:2, scoreB:1},
       {round:"32强赛", a:ARG, b:CPV, winner:null},
       {round:"32强赛", a:AUS, b:EGY, winner:null},
       {round:"32强赛", a:SUI, b:ALG, winner:null},
       {round:"32强赛", a:COL, b:GHA, winner:null},
       // 16 强赛
       {round:"16强赛", a:BRA, b:NOR, winner:null},   // 巴西(已晋级) vs 挪威(已晋级)
-      {round:"16强赛", a:MEX, b:TBD, winner:null},   // 墨西哥(已晋级) vs 英格兰/民主刚果
+      {round:"16强赛", a:MEX, b:ENG, winner:null},   // 墨西哥(已晋级) vs 英格兰(已晋级)
       {round:"16强赛", a:TBD, b:TBD, winner:null},   // 阿根廷/佛得角 vs 澳大利亚/埃及
       {round:"16强赛", a:TBD, b:TBD, winner:null},   // 瑞士/阿尔及利亚 vs 哥伦比亚/加纳
       // 1/4 决赛
