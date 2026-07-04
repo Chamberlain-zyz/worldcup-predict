@@ -363,7 +363,7 @@
   const CX = W/2, CY = H/2;
   const R = 290;            // 圆形球场半径
   const BALL_R = 38;        // 足球半径
-  const GOAL_SPAN = 0.42;   // 球门弧度（约 24°，整球进框后实际可进窗口极小）
+  const GOAL_SPAN = 0.32;   // 球门弧度（约 24°，整球进框后实际可进窗口极小）
 
   // ---------- 配置 / 常量 ----------
   // 比赛流程
@@ -1298,12 +1298,12 @@
       {round:"32强赛", a:ARG, b:CPV, winner:"a", scoreA:3, scoreB:2},
       {round:"32强赛", a:AUS, b:EGY, winner:"b", scoreA:1, scoreB:1, penA:2, penB:4},
       {round:"32强赛", a:SUI, b:ALG, winner:"a", scoreA:2, scoreB:0},
-      {round:"32强赛", a:COL, b:GHA, winner:null},
+      {round:"32强赛", a:COL, b:GHA, winner:"a", scoreA:1, scoreB:0},
       // 16 强赛
       {round:"16强赛", a:BRA, b:NOR, winner:null},   // 巴西(已晋级) vs 挪威(已晋级)
       {round:"16强赛", a:MEX, b:ENG, winner:null},   // 墨西哥(已晋级) vs 英格兰(已晋级)
       {round:"16强赛", a:ARG, b:EGY, winner:null},   // 阿根廷(已晋级) vs 埃及(点球晋级)
-      {round:"16强赛", a:SUI, b:TBD, winner:null},   // 瑞士(已晋级) vs 哥伦比亚/加纳
+      {round:"16强赛", a:SUI, b:COL, winner:null},   // 瑞士(已晋级) vs 哥伦比亚(已晋级)
       // 1/4 决赛
       {round:"1/4决赛", a:TBD, b:TBD, winner:null},
       {round:"1/4决赛", a:TBD, b:TBD, winner:null},
