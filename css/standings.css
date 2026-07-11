@@ -1,0 +1,90 @@
+/* ==========================================================================
+   standings.css - 积分榜（联赛页专属）
+   联赛布局 / 积分榜表格 / 分区配色 / DOM 队徽 / 赛季下拉
+   依赖 base.css
+   ========================================================================== */
+
+/* ---------- 布局：左积分榜 | 中球场 ---------- */
+.layout{
+  display:flex;gap:16px;align-items:flex-start;justify-content:center;
+  width:min(1200px,99vw);margin-top:6px;
+}
+.table-side{
+  flex:0 0 380px;display:flex;flex-direction:column;
+  background:linear-gradient(180deg,#15281c,#0b1810);
+  border:1px solid rgba(255,255,255,.12);border-radius:14px;
+  padding:12px 10px 10px;box-shadow:0 8px 30px rgba(0,0,0,.45);
+}
+.table-head{font-weight:800;font-size:14px;letter-spacing:1px;color:var(--gold);margin-bottom:2px}
+.season-bar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:2px}
+.season-select{
+  background:linear-gradient(180deg,#1a3324,#0d2014);
+  color:var(--gold);border:1px solid rgba(255,211,77,.4);
+  border-radius:8px;padding:4px 8px;font-family:inherit;font-size:12px;
+  font-weight:700;cursor:pointer;letter-spacing:.5px;outline:none;
+}
+.season-select:hover{border-color:var(--gold)}
+.season-select option{background:#0d2014;color:#fff}
+.table-hint{font-size:11px;opacity:.55;text-align:center;margin:6px 0 8px;letter-spacing:.5px}
+
+/* ---------- 积分榜表格 ---------- */
+.stand{
+  width:100%;border-collapse:collapse;font-size:12px;
+  font-variant-numeric:tabular-nums;
+}
+.stand thead th{
+  padding:5px 4px;font-weight:700;font-size:10px;letter-spacing:.5px;
+  color:rgba(255,255,255,.6);border-bottom:1px solid rgba(255,255,255,.15);
+  text-align:center;
+}
+.stand thead th.left{text-align:left}
+.stand tbody tr{
+  border-bottom:1px solid rgba(255,255,255,.05);
+  cursor:pointer;transition:background .12s;
+}
+.stand tbody tr:hover{background:rgba(255,211,77,.1)}
+.stand tbody tr.home{background:rgba(255,211,77,.22);box-shadow:inset 3px 0 0 var(--gold)}
+.stand tbody tr.away{background:rgba(74,163,255,.22);box-shadow:inset 3px 0 0 #4aa3ff}
+.stand td{padding:5px 4px;text-align:center;line-height:1.3}
+.stand td.pos{font-weight:700;opacity:.75;width:24px}
+.stand td.tm{text-align:left;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px}
+.stand td.tm .badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:20px;height:20px;border-radius:4px;font-size:9px;font-weight:900;
+  margin-right:6px;vertical-align:middle;border:1px solid rgba(255,255,255,.2);
+  letter-spacing:0;
+}
+.stand td.pts{font-weight:800;color:var(--gold);width:32px}
+.stand tr.zone-ucl td.pos{color:#4aa3ff}
+.stand tr.zone-uel td.pos{color:#e58a4a}
+.stand tr.zone-relegate td.pos{color:#ff5a5a}
+.stand-legend{
+  display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
+  font-size:10px;opacity:.65;margin-top:8px;padding-top:6px;
+  border-top:1px solid rgba(255,255,255,.08);
+}
+.stand-legend .lg-dot{
+  display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px;
+  vertical-align:middle;
+}
+
+/* ---------- DOM 队徽（记分牌大徽 / 积分榜小徽 / 结果卡徽 / 点球条徽） ---------- */
+.flag .badge-dom{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:42px;height:30px;border-radius:4px;font-size:12px;font-weight:900;
+  box-shadow:0 2px 6px rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.25);
+  letter-spacing:.5px;
+}
+.final-team .fbadge{width:48px;height:48px;display:flex;align-items:center;justify-content:center;
+  border-radius:10px;font-size:14px;font-weight:900;letter-spacing:.5px;
+  box-shadow:0 4px 12px rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.25)}
+.pens-row .pf{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:22px;height:16px;border-radius:3px;font-size:8px;font-weight:900;
+  border:1px solid rgba(255,255,255,.2);flex:0 0 auto;letter-spacing:0;
+}
+
+@media(max-width:900px){
+  .layout{flex-direction:column;align-items:center}
+  .table-side{flex:0 0 auto;width:min(560px,96vw)}
+}

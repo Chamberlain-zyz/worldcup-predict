@@ -1,22 +1,25 @@
 # ⚽ 世界杯小游戏 · World Cup Predict
 
-一个用**单文件 HTML** 实现的 2026 美加墨世界杯模拟小游戏。无需任何构建工具或依赖，浏览器打开即可游玩。
+一个用**纯静态 HTML + Canvas** 实现的足球模拟小游戏，包含 **2026 美加墨世界杯** 淘汰赛对阵图 + **5 大联赛**（英超 / 西甲 / 意甲 / 德甲 / 法甲）近 5 个赛季的积分榜对战。无需任何构建工具或依赖，浏览器打开即可游玩。
 
 ## ✨ 功能特性
 
-- 🏆 **淘汰赛对阵树**：左右两侧分别展示上半区 / 下半区对阵图，点击任意一场比赛即可开战。
-- 🎲 **随机抽队**：不想自己挑？点一下按钮随机抽两队对战。
+- 🏆 **世界杯淘汰赛对阵树**（`worldcup.html`）：左右两侧上/下半区对阵图，点任意一场比赛开战。
+- ⚽ **5 大联赛积分榜对战**（`spain.html` / `england.html` / `italy.html` / `germany.html` / `france.html`）：内置近 5 个赛季（2021/22 ~ 2025/26）积分榜，点击两支球队自定义主客队对战。
+- 🎲 **随机抽队**：不想自己挑？点一下按钮 / 按空格键随机抽两队对战。
 - 🎮 **canvas 球场物理模拟**：实时模拟球场与足球运动，进球判定严格——**整球需穿过门框且不碰立柱**才算进球。
 - ⏱️ **完整比赛时钟**：常规时间 90 分钟，平局可配置进入加时赛至 120 分钟，再平局进入点球大战。
-- 🚩 **国旗显示**：通过 [flagcdn](https://flagcdn.com/) 加载各国国旗，支持 emoji 回退。
-- 🌍 **32 支国家队**：涵盖巴西、阿根廷、法国、德国、西班牙、英格兰等热门球队。
+- 🚩 **球队标识**：世界杯页用 [flagcdn](https://flagcdn.com/) 国旗；联赛页用球队主客场色 + 3 字母缩写的动态队徽。
 
 ## 🚀 快速开始
 
-直接用浏览器打开 `worldcup.html` 即可，无需安装、无需构建：
+直接用浏览器双击打开任意一个 HTML 即可，无需安装、无需构建：
+
+- `worldcup.html` — 世界杯淘汰赛
+- `spain.html` / `england.html` / `italy.html` / `germany.html` / `france.html` — 五大联赛
 
 ```bash
-# 任选其一
+# 任选其一（打开世界杯页）
 start worldcup.html        # Windows
 open worldcup.html         # macOS
 xdg-open worldcup.html     # Linux
@@ -31,7 +34,7 @@ xdg-open worldcup.html     # Linux
 
 ## ⚙️ 配置项
 
-所有配置集中在 `worldcup.html` 的 `// ---------- 配置 / 常量 ----------` 区域（约 370 行起），用文本编辑器直接改即可，改完刷新浏览器生效。
+比赛流程/物理/点球所有配置集中在 `js/engine.js` 顶部的 `// ---------- 配置 / 常量 ----------` 区域，用文本编辑器直接改即可，改完刷新浏览器生效。所有页面共享同一份引擎，改一次全生效。
 
 ### 比赛流程
 
@@ -83,16 +86,42 @@ xdg-open worldcup.html     # Linux
 
 ## 🛠️ 技术栈
 
-- 纯原生 **HTML / CSS / JavaScript**，单文件实现，零依赖
+- 纯原生 **HTML / CSS / JavaScript**，零依赖，零构建
 - **Canvas 2D** 绘制球场与足球动画
-- 国旗资源来自 [flagcdn](https://flagcdn.com/)（支持 CORS）
+- CSS/JS 按功能模块拆分（`base.css` 通用 / `standings.css` 积分榜 / `bracket.css` 对阵图；`engine.js` 引擎 / `standings.js` 联赛 / `bracket.js` 世界杯），通过 TEAM 适配器复用引擎
+- 世界杯页国旗资源来自 [flagcdn](https://flagcdn.com/)（支持 CORS）
 
 ## 📁 项目结构
 
 ```
 worldcup-predict/
-└── worldcup.html      # 全部代码（HTML + CSS + JS 内联）
+├── worldcup.html              # 2026 美加墨世界杯淘汰赛
+├── spain.html                 # 西甲 · LaLiga
+├── england.html               # 英超 · Premier League
+├── italy.html                 # 意甲 · Serie A
+├── germany.html               # 德甲 · Bundesliga
+├── france.html                # 法甲 · Ligue 1
+├── css/
+│   ├── base.css               # 通用样式（记分牌/时钟/canvas/结果卡/点球条/按钮）
+│   ├── standings.css          # 积分榜（联赛页专属）
+│   └── bracket.css            # 对阵树（世界杯页专属）
+├── js/
+│   ├── engine.js              # 比赛引擎（物理/点球/渲染/主循环，所有页面共享）
+│   ├── standings.js           # 联赛积分榜逻辑 + 队徽适配器
+│   └── bracket.js             # 世界杯对阵图逻辑 + 国旗适配器
+└── data/                      # （预留）JSON 数据目录，见 data/README.md
 ```
+
+### 想接入 HTTP 数据加载
+
+目前所有球队/赛季数据都写死在各 HTML 内联 `<script>` 里，因为 `file://` 协议下浏览器禁止 `fetch()` 读本地 JSON。若日后要把数据外置到 `data/*.json`，需通过 HTTP 服务器访问：
+
+```bash
+python -m http.server 8000
+# 打开 http://localhost:8000/spain.html
+```
+
+详见 `data/README.md`。
 
 ## 📄 License
 
