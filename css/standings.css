@@ -112,7 +112,38 @@
   border-color:var(--lg-c);
   box-shadow:0 0 14px color-mix(in srgb, var(--lg-c) 45%, transparent), inset 3px 0 0 var(--gold);
 }
-.league-nav .lg-flag{font-size:22px;line-height:1;flex:0 0 auto;filter:drop-shadow(0 2px 3px rgba(0,0,0,.5))}
+.league-nav .lg-flag{
+  width:26px;height:18px;flex:0 0 auto;border-radius:3px;
+  box-shadow:0 1px 2px rgba(0,0,0,.5), inset 0 0 0 1px rgba(255,255,255,.15);
+  background-size:cover;background-position:center;overflow:hidden;position:relative;
+}
+/* 英格兰：白底 + 红十字 */
+.league-nav .lg-flag-eng{
+  background:
+    linear-gradient(#c8102e,#c8102e) center/100% 3px no-repeat,
+    linear-gradient(#c8102e,#c8102e) center/3px 100% no-repeat,
+    #ffffff;
+}
+/* 西班牙：红-黄-红三色横条 */
+.league-nav .lg-flag-esp{
+  background:linear-gradient(#c60b1e 0 25%, #ffc400 25% 75%, #c60b1e 75% 100%);
+}
+/* 意大利：绿-白-红三色纵条 */
+.league-nav .lg-flag-ita{
+  background:linear-gradient(90deg,#009246 0 33.33%,#ffffff 33.33% 66.66%,#ce2b37 66.66% 100%);
+}
+/* 德国：黑-红-金三色横条 */
+.league-nav .lg-flag-ger{
+  background:linear-gradient(#000000 0 33.33%,#dd0000 33.33% 66.66%,#ffce00 66.66% 100%);
+}
+/* 法国：蓝-白-红三色纵条 */
+.league-nav .lg-flag-fra{
+  background:linear-gradient(90deg,#0055a4 0 33.33%,#ffffff 33.33% 66.66%,#ef4135 66.66% 100%);
+}
+/* 世界杯：地球风格 */
+.league-nav .lg-flag-world{
+  background:radial-gradient(circle at 35% 35%, #6ec1ff 0 30%, #2d7dd2 30% 70%, #0b3d91 70% 100%);
+}
 .league-nav .lg-txt{display:flex;flex-direction:column;min-width:0;line-height:1.15}
 .league-nav .lg-name{font-size:14px;font-weight:800;letter-spacing:1px}
 .league-nav .lg-sub{font-size:9.5px;opacity:.6;letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
