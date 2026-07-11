@@ -169,7 +169,9 @@
 
   const engine = initEngine(TEAM, {
     onClearSelection: clearSelection,
-    resetOverlay: resetOverlay
+    resetOverlay: resetOverlay,
+    allowExtra: false,   // 联赛：90 分钟平局就是平局（各 1 分）
+    allowPens: false     // 联赛不打点球
   });
 
   renderStanding();

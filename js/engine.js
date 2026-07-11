@@ -13,9 +13,11 @@
      pensMark(t),                 // 点球条前缀标记 HTML
      drawOnCanvas(ctx, ball, R),  // canvas 内画球身份（已裁剪到圆内、已旋转）
    }
-   opts = { onClearSelection, resetOverlay }
+   opts = { onClearSelection, resetOverlay, allowExtra, allowPens }
      onClearSelection()           // 随机开局 / 比赛结束时清选队高亮（联赛用）
      resetOverlay                  // {title, body, btn} 清空预览时还原的遮罩（联赛取消选队用）
+     allowExtra (默认 true)        // 90 平局是否进入加时；联赛设 false（平局各 1 分）
+     allowPens  (默认 true)        // 120 平局是否进入点球大战；联赛设 false
    ========================================================================== */
 window.initEngine = function(TEAM, opts){
   "use strict";
@@ -44,8 +46,8 @@ window.initEngine = function(TEAM, opts){
   const GOAL_SPAN = 0.32;
 
   // ---------- 配置 / 常量 ----------
-  const ALLOW_EXTRA = true;
-  const ALLOW_PENS = true;
+  const ALLOW_EXTRA = opts.allowExtra !== false;
+  const ALLOW_PENS = opts.allowPens !== false;
   const FORCE_EXTRA = false;
   const FORCE_PENS = false;
   const T_REG = 60, T_EXTRA = 20, P_ACCEL = 1;
