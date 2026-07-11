@@ -26,26 +26,20 @@
     c.closePath();
   }
 
-  // canvas 版队徽：圆角矩形主色块 + 次色横条 + 3 字母缩写
+  // canvas 版球身：整颗球用队伍主色铺底 + 缩写字母（不要条纹）
+  // 调用前 engine.js 已把绘制区裁剪到球体圆内，直接一个大矩形铺满即可
   function drawBadgeToCanvas(ctx, team, size){
-    const w=size*2, h=size*1.4;
-    const rx=6;
+    const s = size*2;
     ctx.fillStyle = team.c1;
-    roundRect(ctx, -w/2, -h/2, w, h, rx);
-    ctx.fill();
-    ctx.fillStyle = team.c2;
-    ctx.fillRect(-w/2, -h*0.15, w, h*0.30);
+    ctx.fillRect(-s, -s, s*2, s*2);
     const light = isLight(team.c1);
     ctx.fillStyle = light ? team.c2 : "#ffffff";
-    ctx.strokeStyle = light ? "rgba(0,0,0,.4)" : "rgba(0,0,0,.6)";
-    ctx.lineWidth = 1.2;
-    ctx.font = "900 " + Math.round(size*0.55) + "px 'Segoe UI',system-ui,sans-serif";
+    ctx.strokeStyle = light ? "rgba(0,0,0,.5)" : "rgba(0,0,0,.6)";
+    ctx.lineWidth = 1.5;
+    ctx.font = "900 " + Math.round(size*0.62) + "px 'Segoe UI',system-ui,sans-serif";
     ctx.textAlign="center"; ctx.textBaseline="middle";
     ctx.strokeText(team.abbr, 0, 1);
     ctx.fillText(team.abbr, 0, 1);
-    ctx.strokeStyle="rgba(0,0,0,.4)"; ctx.lineWidth=1.5;
-    roundRect(ctx, -w/2, -h/2, w, h, rx);
-    ctx.stroke();
   }
 
   // DOM 版队徽：积分榜 / 记分牌 / 结果卡 / 点球条 用的小徽章
