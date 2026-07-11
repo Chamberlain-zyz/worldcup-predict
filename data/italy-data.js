@@ -30,6 +30,28 @@ const CLUBS = {
     pis:{short:"Pisa",          zh:"比萨",         c1:"#003c99", c2:"#ffffff", abbr:"PIS"}
   };
 const SEASONS = [
+    {label:"2026/27", clubs:[
+      {code:"int",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"nap",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"rom",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"com",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"mil",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"juv",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"ata",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"bol",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"laz",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"udi",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"sas",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"tor",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"par",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"cag",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"fio",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"gen",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"lec",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"cre",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"ver",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"pis",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0}
+    ]},
     {label:"2025/26", clubs:[
       {code:"int",pld:38,w:27,d:6,l:5,gf:89,ga:35,pts:87},
       {code:"nap",pld:38,w:23,d:7,l:8,gf:58,ga:36,pts:76},

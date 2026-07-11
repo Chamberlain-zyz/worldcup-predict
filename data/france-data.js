@@ -28,6 +28,26 @@ const CLUBS = {
     bor:{short:"Bordeaux",     zh:"波尔多",       c1:"#013d84", c2:"#ffffff", abbr:"BDX"}
   };
 const SEASONS = [
+    {label:"2026/27", clubs:[
+      {code:"psg",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"len",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"lil",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"lyo",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"mar",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"ren",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"mon",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"str",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"tou",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"lor",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"par",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"bre",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"ang",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"hav",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"aux",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"nic",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"nan",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"met",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0}
+    ]},
     {label:"2025/26", clubs:[
       {code:"psg",pld:34,w:24,d:4,l:6,gf:74,ga:29,pts:76},
       {code:"len",pld:34,w:22,d:4,l:8,gf:66,ga:35,pts:70},

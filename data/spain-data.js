@@ -29,6 +29,28 @@ const CLUBS = {
     gra:{short:"Granada",      zh:"格拉纳达",     c1:"#ffffff", c2:"#a4001f", abbr:"GRA"}
   };
 const SEASONS = [
+    {label:"2026/27", clubs:[
+      {code:"bar",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"rma",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"vil",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"atm",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"bet",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"cel",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"get",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"ray",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"val",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"rso",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"esp",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"ath",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"sev",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"ala",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"elc",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"lev",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"osa",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"mlc",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"gir",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"ovi",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0}
+    ]},
     {label:"2025/26", clubs:[
       {code:"bar",pld:38,w:31,d:1,l:6,gf:95,ga:36,pts:94},
       {code:"rma",pld:38,w:27,d:5,l:6,gf:77,ga:35,pts:86},

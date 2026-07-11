@@ -29,6 +29,26 @@ const CLUBS = {
     ber:{short:"Union Berlin",   zh:"柏林联合",     c1:"#eb1923", c2:"#ffed00", abbr:"BER"}
   };
 const SEASONS = [
+    {label:"2026/27", clubs:[
+      {code:"bay",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"bvb",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"rbl",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"stu",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"hof",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"lev",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"frb",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"fra",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"aug",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"m05",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"uni",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"bmg",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"hbg",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"kol",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"wer",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"wol",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"hei",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"stp",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0}
+    ]},
     {label:"2025/26", clubs:[
       {code:"bay",pld:34,w:28,d:5,l:1,gf:122,ga:36,pts:89},
       {code:"bvb",pld:34,w:22,d:7,l:5,gf:70,ga:34,pts:73},

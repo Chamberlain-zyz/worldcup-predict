@@ -30,6 +30,28 @@ const CLUBS = {
     wat:{short:"Watford",        zh:"沃特福德",     c1:"#fbee23", c2:"#ed2127", abbr:"WAT"}
   };
 const SEASONS = [
+    {label:"2026/27", clubs:[
+      {code:"ars",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"mci",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"mun",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"avl",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"liv",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"bou",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"sun",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"bha",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"bre",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"che",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"ful",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"new",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"eve",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"lee",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"cry",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"nfo",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"tot",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"whu",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"bur",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
+      {code:"wol",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0}
+    ]},
     {label:"2025/26", clubs:[
       {code:"ars",pld:38,w:26,d:7,l:5,gf:71,ga:27,pts:85},
       {code:"mci",pld:38,w:23,d:9,l:6,gf:77,ga:35,pts:78},
