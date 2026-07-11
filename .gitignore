@@ -1,6 +1,7 @@
 # IDE
 .idea/
 .workbuddy/
+.claude/
 
 # OS
 .DS_Store
