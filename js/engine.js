@@ -28,6 +28,12 @@ window.initEngine = function(TEAM, opts){
   // ---------- DOM ----------
   const canvas = document.getElementById("pitch");
   const ctx = canvas.getContext("2d");
+  // 高清渲染：实际像素 1080×1080（录屏/截图更清晰），逻辑坐标保持 640（所有现有计算不变）
+  // 注意：给 canvas.width/height 赋值会重置 context 状态，所以先设尺寸再 scale
+  const LOGICAL = 640;
+  canvas.width = 1080;
+  canvas.height = 1080;
+  ctx.scale(1080 / LOGICAL, 1080 / LOGICAL);
   const elFlagA=document.getElementById("flagA"), elNameA=document.getElementById("nameA"), elScoreA=document.getElementById("scoreA");
   const elFlagB=document.getElementById("flagB"), elNameB=document.getElementById("nameB"), elScoreB=document.getElementById("scoreB");
   const elClock=document.getElementById("clockMin"), elBar=document.getElementById("progressBar"),
@@ -39,7 +45,7 @@ window.initEngine = function(TEAM, opts){
         elPensRowA=document.getElementById("pensRowA"), elPensRowB=document.getElementById("pensRowB");
 
   // ---------- 几何 ----------
-  const W = canvas.width, H = canvas.height;
+  const W = LOGICAL, H = LOGICAL;
   const CX = W/2, CY = H/2;
   const R = 290;
   const BALL_R = 38;
@@ -723,6 +729,29 @@ window.initEngine = function(TEAM, opts){
     elBar.style.width = (state.matchMin/denom*100).toFixed(1)+"%";
   }
 
+  // ---------- 终场彩带（结果卡庆祝效果）----------
+  function clearConfetti(){
+    const old = elOverlay.querySelector(".confetti-layer");
+    if(old) old.remove();
+  }
+  function spawnConfetti(){
+    const layer = document.createElement("div");
+    layer.className = "confetti-layer";
+    const colors = ["#ffd34d","#ff5a5a","#4aa3ff","#3ddb6a","#ff8a4a","#ffffff"];
+    for(let i=0;i<44;i++){
+      const c = document.createElement("span");
+      c.className = "confetti";
+      c.style.left = Math.random()*100 + "%";
+      c.style.background = colors[i % colors.length];
+      c.style.animationDelay = (Math.random()*0.5) + "s";
+      c.style.animationDuration = (1.1 + Math.random()*1.3) + "s";
+      c.style.width = (6 + Math.random()*6) + "px";
+      c.style.height = (10 + Math.random()*8) + "px";
+      layer.appendChild(c);
+    }
+    return layer;
+  }
+
   function finishMatch(){
     applyUI(state);
     if(state.pens){
@@ -752,6 +781,8 @@ window.initEngine = function(TEAM, opts){
          </div>
          <div class="final-winner-line">${title}</div>`;
       elStartBtn.textContent="再来一局";
+      clearConfetti();
+      elOverlay.appendChild(spawnConfetti());
       elOverlay.classList.remove("hidden");
       applyPensScoreboard();
       onClearSelection();
@@ -782,6 +813,8 @@ window.initEngine = function(TEAM, opts){
        </div>
        <div class="final-winner-line">${title}</div>`;
     elStartBtn.textContent="再来一局";
+    clearConfetti();
+    if(winIdx >= 0) elOverlay.appendChild(spawnConfetti());
     elOverlay.classList.remove("hidden");
     onClearSelection();
   }
@@ -801,6 +834,7 @@ window.initEngine = function(TEAM, opts){
        </div>
        <div style="opacity:.7;font-size:13px;margin-top:6px">点击下方按钮 / 按空格键开始模拟</div>`;
     elStartBtn.textContent = "开始模拟";
+    clearConfetti();
     elOverlay.classList.remove("hidden");
     updateClock();
     draw();
@@ -812,6 +846,7 @@ window.initEngine = function(TEAM, opts){
       elOverlayTitle.textContent = resetOverlay.title;
       elOverlayBody.innerHTML = resetOverlay.body;
       elStartBtn.textContent = resetOverlay.btn;
+      clearConfetti();
       elOverlay.classList.remove("hidden");
     }
   }
@@ -820,6 +855,7 @@ window.initEngine = function(TEAM, opts){
     state = newMatch(tA, tB);
     applyUI(state);
     elPensBar.style.display="none";
+    clearConfetti();
     elOverlay.classList.add("hidden");
     state.realStart = performance.now()/1000;
     state.started = true;
