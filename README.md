@@ -13,13 +13,13 @@
 
 ## 🚀 快速开始
 
-直接用浏览器打开 `index.html` 即可，无需安装、无需构建：
+直接用浏览器打开 `worldcup.html` 即可，无需安装、无需构建：
 
 ```bash
 # 任选其一
-start index.html        # Windows
-open index.html         # macOS
-xdg-open index.html     # Linux
+start worldcup.html        # Windows
+open worldcup.html         # macOS
+xdg-open worldcup.html     # Linux
 ```
 
 ## 🎯 玩法说明
@@ -31,7 +31,7 @@ xdg-open index.html     # Linux
 
 ## ⚙️ 配置项
 
-所有配置集中在 `index.html` 的 `// ---------- 配置 / 常量 ----------` 区域（约 370 行起），用文本编辑器直接改即可，改完刷新浏览器生效。
+所有配置集中在 `worldcup.html` 的 `// ---------- 配置 / 常量 ----------` 区域（约 370 行起），用文本编辑器直接改即可，改完刷新浏览器生效。
 
 ### 比赛流程
 
@@ -91,7 +91,7 @@ xdg-open index.html     # Linux
 
 ```
 worldcup-predict/
-└── index.html      # 全部代码（HTML + CSS + JS 内联）
+└── worldcup.html      # 全部代码（HTML + CSS + JS 内联）
 ```
 
 ## 📄 License
