@@ -84,7 +84,54 @@
   border:1px solid rgba(255,255,255,.2);flex:0 0 auto;letter-spacing:0;
 }
 
+/* ---------- 左侧联赛导航栏 ---------- */
+.league-nav{
+  flex:0 0 130px;display:flex;flex-direction:column;gap:6px;
+  background:linear-gradient(180deg,#15281c,#0b1810);
+  border:1px solid rgba(255,255,255,.12);border-radius:14px;
+  padding:12px 8px;box-shadow:0 8px 30px rgba(0,0,0,.45);
+}
+.league-nav .lg-head{
+  font-weight:800;font-size:13px;letter-spacing:1px;color:var(--gold);
+  text-align:center;padding-bottom:6px;margin-bottom:2px;
+  border-bottom:1px solid rgba(255,255,255,.1);
+}
+.league-nav .lg-item{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 10px;border-radius:10px;text-decoration:none;color:#fff;
+  border:1px solid transparent;background:rgba(255,255,255,.03);
+  transition:transform .12s,background .12s,border-color .12s,box-shadow .12s;
+}
+.league-nav .lg-item:hover{
+  background:rgba(255,255,255,.08);
+  border-color:rgba(255,255,255,.15);
+  transform:translateX(2px);
+}
+.league-nav .lg-item.active{
+  background:linear-gradient(90deg, color-mix(in srgb, var(--lg-c) 55%, transparent), rgba(255,255,255,.05));
+  border-color:var(--lg-c);
+  box-shadow:0 0 14px color-mix(in srgb, var(--lg-c) 45%, transparent), inset 3px 0 0 var(--gold);
+}
+.league-nav .lg-flag{font-size:22px;line-height:1;flex:0 0 auto;filter:drop-shadow(0 2px 3px rgba(0,0,0,.5))}
+.league-nav .lg-txt{display:flex;flex-direction:column;min-width:0;line-height:1.15}
+.league-nav .lg-name{font-size:14px;font-weight:800;letter-spacing:1px}
+.league-nav .lg-sub{font-size:9.5px;opacity:.6;letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.league-nav .lg-sep{
+  height:1px;background:rgba(255,255,255,.1);margin:4px 4px 2px;
+}
+.league-nav .lg-extra{background:rgba(255,211,77,.05)}
+.league-nav .lg-extra .lg-name{color:var(--gold)}
+
 @media(max-width:900px){
   .layout{flex-direction:column;align-items:center}
   .table-side{flex:0 0 auto;width:min(560px,96vw)}
+  .league-nav{
+    flex:0 0 auto;width:min(560px,96vw);
+    flex-direction:row;flex-wrap:wrap;justify-content:center;gap:6px;
+    padding:8px;
+  }
+  .league-nav .lg-head{flex:1 0 100%;padding-bottom:4px;margin-bottom:0}
+  .league-nav .lg-item{flex:1 1 auto;padding:6px 10px}
+  .league-nav .lg-sep{display:none}
+  .league-nav .lg-sub{display:none}
 }
