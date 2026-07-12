@@ -83,6 +83,23 @@
     ]},
   ];
 
+  // ---------- 12 个小组第 3 名排名榜（前 8 晋级 32 强） ----------
+  // 字段：rk 排名 · grp 小组 · n 中文名 · code ISO · e emoji · w/d/l · gf/ga · gd 净胜 · pts · adv
+  const THIRDS = [
+    {rk:1,  grp:"K", n:"刚果（金）",   code:"cd",     e:"🇨🇩", w:1,d:1,l:1,gf:4,ga:3,gd: 1, pts:4, adv:"third"},
+    {rk:2,  grp:"F", n:"瑞典",         code:"se",     e:"🇸🇪", w:1,d:1,l:1,gf:7,ga:7,gd: 0, pts:4, adv:"third"},
+    {rk:3,  grp:"L", n:"加纳",         code:"gh",     e:"🇬🇭", w:1,d:1,l:1,gf:2,ga:2,gd: 0, pts:4, adv:"third"},
+    {rk:4,  grp:"E", n:"厄瓜多尔",     code:"ec",     e:"🇪🇨", w:1,d:1,l:1,gf:2,ga:2,gd: 0, pts:4, adv:"third"},
+    {rk:5,  grp:"B", n:"波黑",         code:"ba",     e:"🇧🇦", w:1,d:1,l:1,gf:5,ga:6,gd:-1, pts:4, adv:"third"},
+    {rk:6,  grp:"J", n:"阿尔及利亚",   code:"dz",     e:"🇩🇿", w:1,d:1,l:1,gf:5,ga:7,gd:-2, pts:4, adv:"third"},
+    {rk:7,  grp:"D", n:"巴拉圭",       code:"py",     e:"🇵🇾", w:1,d:1,l:1,gf:2,ga:4,gd:-2, pts:4, adv:"third"},
+    {rk:8,  grp:"I", n:"塞内加尔",     code:"sn",     e:"🇸🇳", w:1,d:0,l:2,gf:8,ga:6,gd: 2, pts:3, adv:"third"},
+    {rk:9,  grp:"G", n:"伊朗",         code:"ir",     e:"🇮🇷", w:0,d:3,l:0,gf:3,ga:3,gd: 0, pts:3, adv:"out"},
+    {rk:10, grp:"A", n:"韩国",         code:"kr",     e:"🇰🇷", w:1,d:0,l:2,gf:2,ga:3,gd:-1, pts:3, adv:"out"},
+    {rk:11, grp:"C", n:"苏格兰",       code:"gb-sct", e:"🏴",  w:1,d:0,l:2,gf:1,ga:4,gd:-3, pts:3, adv:"out"},
+    {rk:12, grp:"H", n:"乌拉圭",       code:"uy",     e:"🇺🇾", w:0,d:2,l:1,gf:3,ga:4,gd:-1, pts:2, adv:"out"},
+  ];
+
   // ---------- 国旗小图（flagcdn，失败降级为 emoji） ----------
   function flag(code, emoji){
     return `<img class="gflag" src="https://flagcdn.com/${code}.svg" alt="${emoji}"
@@ -129,8 +146,24 @@
 
   function render(){
     const host = document.getElementById("groupsGrid");
-    if(!host) return;
-    host.innerHTML = GROUPS.map(groupHTML).join("");
+    if(host) host.innerHTML = GROUPS.map(groupHTML).join("");
+    const thirds = document.getElementById("thirdsBody");
+    if(thirds){
+      thirds.innerHTML = THIRDS.map(t=>{
+        const cls = t.adv==="third" ? "adv-third" : "adv-out";
+        return `<tr class="${cls}">
+          <td class="grk">${t.rk}</td>
+          <td class="gtm">${flag(t.code,t.e)}<span class="gname">${t.n}</span></td>
+          <td class="ggrp">${t.grp}</td>
+          <td>${t.w}</td>
+          <td>${t.d}</td>
+          <td>${t.l}</td>
+          <td class="ggf">${t.gf}/${t.ga}</td>
+          <td class="ggd">${gdStr(t.gd)}</td>
+          <td class="gpts">${t.pts}</td>
+        </tr>`;
+      }).join("");
+    }
   }
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", render);
   else render();

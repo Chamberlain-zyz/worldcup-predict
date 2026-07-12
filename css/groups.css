@@ -23,10 +23,14 @@
   vertical-align:middle;border:1px solid rgba(255,255,255,.2);
 }
 
-/* ---------- 12 组网格 ---------- */
+/* ---------- 双栏容器：左 12 组，右 第三名榜 ---------- */
+.groups-body{
+  display:flex;gap:14px;align-items:flex-start;
+}
 .groups-grid{
+  flex:1 1 0;min-width:0;
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+  grid-template-columns:repeat(3,1fr);
   gap:12px;
 }
 .group-card{
@@ -89,8 +93,28 @@
   opacity:.55;
 }
 
+/* ---------- 右侧：第三名排名榜 ---------- */
+.thirds-card{
+  flex:0 0 340px;
+  background:linear-gradient(180deg,#15281c,#0b1810);
+  border:1px solid rgba(255,255,255,.12);border-radius:12px;
+  padding:10px 10px 8px;box-shadow:0 6px 20px rgba(0,0,0,.4);
+  align-self:stretch;
+}
+.thirds-head{
+  text-align:center;margin-bottom:6px;padding-bottom:5px;
+  border-bottom:1px solid rgba(255,255,255,.1);
+}
+.thirds-title{font-weight:900;font-size:13px;letter-spacing:1.5px;color:var(--gold)}
+.thirds-sub{display:block;font-size:10px;font-weight:500;opacity:.6;letter-spacing:.5px;margin-top:2px}
+.thirds-card .gtable td.ggrp{
+  font-weight:800;color:var(--gold);opacity:.85;width:22px;letter-spacing:.5px;
+}
+
 /* ---------- 响应式 ---------- */
 @media(max-width:1280px){
+  .groups-body{flex-direction:column}
+  .thirds-card{flex:0 0 auto;width:100%;align-self:auto}
   .groups-grid{grid-template-columns:repeat(3,1fr)}
 }
 @media(max-width:960px){
