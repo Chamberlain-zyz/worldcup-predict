@@ -63,6 +63,7 @@
   display:flex;align-items:center;gap:5px;
 }
 .gtable td.gtm .gname{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gtable td.ggf{font-weight:600;opacity:.75;width:36px;font-size:10.5px;letter-spacing:-.3px}
 .gtable td.ggd{font-weight:600;opacity:.85;width:28px}
 .gtable td.gpts{font-weight:800;color:var(--gold);width:22px}
 .gflag{

@@ -104,6 +104,7 @@
         <td>${t.w}</td>
         <td>${t.d}</td>
         <td>${t.l}</td>
+        <td class="ggf">${t.gf}/${t.ga}</td>
         <td class="ggd">${gdStr(t.gd)}</td>
         <td class="gpts">${t.pts}</td>
       </tr>`;
@@ -117,6 +118,7 @@
           <th title="胜">胜</th>
           <th title="平">平</th>
           <th title="负">负</th>
+          <th title="进球 / 失球">进/失</th>
           <th title="净胜球">净</th>
           <th title="积分">积</th>
         </tr></thead>
