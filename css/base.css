@@ -10,13 +10,13 @@
   --gold:#ffd34d;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
+html,body{min-height:100%}
 body{
   font-family:"Segoe UI",system-ui,"Microsoft YaHei",sans-serif;
   background:radial-gradient(circle at 50% 30%,#102a18,#04140b);
   color:#fff;
   display:flex;flex-direction:column;align-items:center;
-  min-height:100vh;padding:18px 12px 30px;
+  min-height:100vh;padding:18px 12px 60px;
   overflow-x:hidden;
 }
 h1{

@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>⚽ 世界杯小游戏</title>
 <link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/league-nav.css">
 <link rel="stylesheet" href="css/bracket.css">
 </head>
 <body>
@@ -12,15 +13,7 @@
   <div class="subtitle">点「开始模拟」按钮开战；进球得分，90 分钟平局则加时至 120 分钟</div>
 
   <div class="layout">
-    <!-- 左：上半区对阵树 -->
-    <aside class="bracket-side">
-      <div class="bracket-head">🏆 上半区
-        <span class="bracket-sub">2026 美加墨</span>
-      </div>
-      <div class="bracket" id="bracketTop"></div>
-    </aside>
-
-    <!-- 中：球场 + 总决赛席位 -->
+    <!-- 中：球场 + 记分牌（左侧联赛导航栏由 js/league-nav.js 注入到本 .layout 最前） -->
     <main class="center-panel">
       <div class="scoreboard">
         <div class="team">
@@ -58,24 +51,39 @@
         <div class="overlay" id="overlay">
           <h2 id="overlayTitle">⚽ 世界杯小游戏</h2>
           <div id="overlayBody" style="opacity:.85;font-size:14px;line-height:1.7">
-            点击两侧对阵树任一场比赛即可开战<br>或点下方按钮 / 按 <b>空格键</b> 随机抽两队对战<br>进球需整球穿过门框、不碰立柱
+            点击下方对阵树任一场比赛即可开战<br>或点下方按钮 / 按 <b>空格键</b> 随机抽两队对战<br>进球需整球穿过门框、不碰立柱
           </div>
           <button class="btn" id="startBtn">随机开球</button>
         </div>
       </div>
 
-      <div class="final-seat">🏆 总决赛席位</div>
       <div class="hint">物理弹球模拟 · 加速计时 · 平局加时至 120' · 空格键开始</div>
     </main>
+  </div>
 
-    <!-- 右：下半区对阵树 -->
+  <!-- 下方：完整对阵图 上半区 | 冠军席位 | 下半区 -->
+  <section class="bracket-full">
+    <aside class="bracket-side">
+      <div class="bracket-head">🏆 上半区
+        <span class="bracket-sub">2026 美加墨</span>
+      </div>
+      <div class="bracket" id="bracketTop"></div>
+    </aside>
+
+    <div class="trophy-column">
+      <div class="trophy-icon">🏆</div>
+      <div class="trophy-title">世界杯冠军</div>
+      <div class="trophy-seat">总决赛席位</div>
+      <div class="trophy-sub">2026 美加墨</div>
+    </div>
+
     <aside class="bracket-side">
       <div class="bracket-head">🏆 下半区
         <span class="bracket-sub">2026 美加墨</span>
       </div>
       <div class="bracket mirror" id="bracketBottom"></div>
     </aside>
-  </div>
+  </section>
 
 <script>
 // 国家队池 + 队伍常量 + 对阵图数据（数据写死在页面；后续接服务器可改为 fetch data/*.json）
@@ -160,6 +168,7 @@ const NAME_ZH = {
   };
 </script>
 <script src="js/engine.js"></script>
+<script src="js/league-nav.js"></script>
 <script src="js/bracket.js"></script>
 </body>
 </html>
