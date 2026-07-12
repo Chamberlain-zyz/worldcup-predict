@@ -68,6 +68,16 @@
 .league-nav .lg-flag-world{
   background:radial-gradient(circle at 35% 35%, #6ec1ff 0 30%, #2d7dd2 30% 70%, #0b3d91 70% 100%);
 }
+/* 欧冠：蓝底白星（欧冠之星球）*/
+.league-nav .lg-flag-ucl{
+  background:
+    radial-gradient(circle 1.5px at 30% 30%, #fff 99%, transparent),
+    radial-gradient(circle 1.5px at 70% 35%, #fff 99%, transparent),
+    radial-gradient(circle 1.5px at 35% 70%, #fff 99%, transparent),
+    radial-gradient(circle 1.5px at 68% 68%, #fff 99%, transparent),
+    radial-gradient(circle at 50% 50%, #2a6df0 0 60%, #0b2a8f 60% 100%);
+  background-repeat:no-repeat;
+}
 .league-nav .lg-txt{display:flex;flex-direction:column;min-width:0;line-height:1.15}
 .league-nav .lg-name{font-size:14px;font-weight:800;letter-spacing:1px}
 .league-nav .lg-sub{font-size:9.5px;opacity:.6;letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}

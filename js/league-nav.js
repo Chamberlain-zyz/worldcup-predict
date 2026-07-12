@@ -15,7 +15,8 @@
     {file:"../leagues/france.html",  name:"法甲",   sub:"Ligue 1",        flag:"fra", c1:"#091c3e"}
   ];
   const CUPS = [
-    {file:"../cups/worldcup.html", name:"世界杯", sub:"World Cup", flag:"world", c1:"#0b5d2e"}
+    {file:"../cups/worldcup.html", name:"世界杯", sub:"World Cup",         flag:"world", c1:"#0b5d2e"},
+    {file:"../cups/ucl.html",      name:"欧冠",   sub:"Champions League", flag:"ucl",   c1:"#1d4ed8"}
   ];
 
   // 识别当前页：取 pathname 末尾两段 "<dir>/<file>"（如 "leagues/england.html"）用来匹配

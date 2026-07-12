@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚽ 欧冠小游戏</title>
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/league-nav.css">
+<link rel="stylesheet" href="../css/bracket.css">
+<link rel="stylesheet" href="../css/groups.css">
+<link rel="stylesheet" href="../css/ucl.css">
+</head>
+<body>
+  <h1>⚽ 欧冠小游戏</h1>
+  <div class="subtitle">点对阵图任一场比赛开战；或点联赛阶段榜选两队；进球得分，90 分钟平局加时至 120 分钟，再平点球</div>
+
+  <div class="layout">
+    <!-- 中：球场 + 记分牌（左侧联赛导航栏由 js/league-nav.js 注入到本 .layout 最前）-->
+    <main class="center-panel">
+      <div class="scoreboard">
+        <div class="team">
+          <div class="flag" id="flagA">🏳️</div>
+          <div class="tname" id="nameA">A队</div>
+          <div class="goals" id="scoreA">0</div>
+        </div>
+        <div class="center">
+          <div class="vs">VS</div>
+        </div>
+        <div class="team">
+          <div class="flag" id="flagB">🏳️</div>
+          <div class="tname" id="nameB">B队</div>
+          <div class="goals" id="scoreB">0</div>
+        </div>
+      </div>
+
+      <div class="clock-wrap">
+        <div class="clock">
+          <span class="min" id="clockMin">0'</span>
+          <span class="lbl" id="clockMax">/ 90'</span>
+          <span class="extra-tag" id="extraTag"></span>
+        </div>
+        <div class="progress"><i id="progressBar"></i></div>
+      </div>
+
+      <div class="pens-bar" id="pensBar" style="display:none">
+        <div class="pens-row" id="pensRowA"></div>
+        <div class="pens-row" id="pensRowB"></div>
+      </div>
+
+      <div class="stage">
+        <canvas id="pitch" width="640" height="640"></canvas>
+        <div class="goal-flash" id="goalFlash">GOAL!</div>
+        <div class="overlay" id="overlay">
+          <h2 id="overlayTitle">⚽ 欧冠小游戏</h2>
+          <div id="overlayBody" style="opacity:.85;font-size:14px;line-height:1.7">
+            点击下方对阵图任一场比赛即可开战<br>或点下方联赛阶段榜任意两支球队自定义对阵<br>或按 <b>空格键</b> 随机抽两队对战<br>进球需整球穿过门框、不碰立柱
+          </div>
+          <button class="btn" id="startBtn">随机开球</button>
+        </div>
+      </div>
+
+      <div class="final-seat">🏆 普斯卡什竞技场 · 布达佩斯</div>
+      <div class="hint">物理弹球模拟 · 加速计时 · 平局加时至 120' · 点球大战 · 空格键开始</div>
+    </main>
+  </div>
+
+  <!-- 下方：完整对阵图 上半区 | 冠军席位 | 下半区 -->
+  <section class="bracket-full">
+    <aside class="bracket-side">
+      <div class="bracket-head">🏆 上半区
+        <span class="bracket-sub">2025/26 欧冠</span>
+      </div>
+      <div class="bracket" id="bracketTop"></div>
+    </aside>
+
+    <div class="trophy-column">
+      <div class="trophy-icon">🏆</div>
+      <div class="trophy-title">欧冠冠军</div>
+      <div id="trophyChamp" class="trophy-champ"></div>
+      <div id="trophyScore" class="trophy-score"></div>
+      <div class="trophy-sub">2025/26 · 布达佩斯</div>
+    </div>
+
+    <aside class="bracket-side">
+      <div class="bracket-head">🏆 下半区
+        <span class="bracket-sub">2025/26 欧冠</span>
+      </div>
+      <div class="bracket mirror" id="bracketBottom"></div>
+    </aside>
+  </section>
+
+  <!-- 联赛阶段积分榜（瑞士制 36 队单表）-->
+  <section class="groups-section">
+    <div class="groups-title">⭐ 联赛阶段积分榜</div>
+    <div class="groups-sub">2025/26 欧冠 · 瑞士制 36 队 · 每队 8 场 · 前 8 直通 16 强 · 9-24 进入淘汰赛附加赛 · 25-36 出局</div>
+    <div class="groups-legend">
+      <span><i class="lg-dot" style="background:rgba(61,219,106,.6);border-color:#3ddb6a"></i>前 8 名 · 直通 16 强</span>
+      <span><i class="lg-dot" style="background:rgba(255,211,77,.55);border-color:#ffd34d"></i>9-24 名 · 附加赛</span>
+      <span><i class="lg-dot" style="background:rgba(255,255,255,.08)"></i>25-36 名 · 出局</span>
+    </div>
+    <div class="league-body">
+      <div class="league-table" id="leagueA"></div>
+      <div class="league-table" id="leagueB"></div>
+    </div>
+  </section>
+
+<script>
+// 36 队元数据 + 淘汰赛对阵 + 联赛阶段榜（数据写死在页面；源自 2025/26 欧冠真实赛果）
+// 字段：short 英文名 · zh 中文名 · c1 主色 · c2 副色 · abbr 队徽缩写
+const CLUBS = {
+    ars:{short:"Arsenal",         zh:"阿森纳",       c1:"#ef0107", c2:"#ffffff", abbr:"ARS"},
+    bay:{short:"Bayern München",  zh:"拜仁慕尼黑",   c1:"#dc052d", c2:"#ffffff", abbr:"BAY"},
+    liv:{short:"Liverpool",       zh:"利物浦",       c1:"#c8102e", c2:"#ffffff", abbr:"LIV"},
+    tot:{short:"Tottenham",       zh:"热刺",         c1:"#132257", c2:"#ffffff", abbr:"TOT"},
+    bar:{short:"Barcelona",       zh:"巴塞罗那",     c1:"#a50044", c2:"#004d98", abbr:"BAR"},
+    che:{short:"Chelsea",         zh:"切尔西",       c1:"#034694", c2:"#ffffff", abbr:"CHE"},
+    spo:{short:"Sporting CP",     zh:"葡萄牙体育",   c1:"#008057", c2:"#ffffff", abbr:"SCP"},
+    mci:{short:"Man City",        zh:"曼城",         c1:"#6cabdd", c2:"#ffffff", abbr:"MCI"},
+    rma:{short:"Real Madrid",     zh:"皇家马德里",   c1:"#ffffff", c2:"#00529f", abbr:"RMA"},
+    int:{short:"Inter",          zh:"国际米兰",     c1:"#0068a8", c2:"#ffffff", abbr:"INT"},
+    psg:{short:"Paris SG",       zh:"巴黎圣日耳曼", c1:"#004170", c2:"#da291c", abbr:"PSG"},
+    new:{short:"Newcastle",      zh:"纽卡斯尔",     c1:"#1a1a1a", c2:"#ffffff", abbr:"NEW"},
+    juv:{short:"Juventus",       zh:"尤文图斯",     c1:"#1a1a1a", c2:"#ffffff", abbr:"JUV"},
+    atm:{short:"Atlético",       zh:"马德里竞技",   c1:"#cb3524", c2:"#ffffff", abbr:"ATM"},
+    ata:{short:"Atalanta",       zh:"亚特兰大",     c1:"#1e71b8", c2:"#ffffff", abbr:"ATA"},
+    lev:{short:"Leverkusen",     zh:"勒沃库森",     c1:"#e32219", c2:"#000000", abbr:"LEV"},
+    bvb:{short:"Dortmund",        zh:"多特蒙德",     c1:"#fde100", c2:"#000000", abbr:"BVB"},
+    oly:{short:"Olympiacos",     zh:"奥林匹亚科斯", c1:"#e30613", c2:"#ffffff", abbr:"OLY"},
+    bru:{short:"Club Brugge",    zh:"布鲁日",       c1:"#0066b3", c2:"#ffffff", abbr:"BRU"},
+    gal:{short:"Galatasaray",    zh:"加拉塔萨雷",   c1:"#a90432", c2:"#fbb800", abbr:"GAL"},
+    mon:{short:"Monaco",         zh:"摩纳哥",       c1:"#e30613", c2:"#ffffff", abbr:"ASM"},
+    qar:{short:"Qarabağ",        zh:"卡拉巴赫",     c1:"#7a2040", c2:"#ffffff", abbr:"QAR"},
+    gli:{short:"Bodø/Glimt",     zh:"博多格林特",   c1:"#ffd500", c2:"#000000", abbr:"GLI"},
+    ben:{short:"Benfica",        zh:"本菲卡",       c1:"#e30613", c2:"#ffffff", abbr:"BEN"},
+    mar:{short:"Marseille",      zh:"马赛",         c1:"#2faee0", c2:"#ffffff", abbr:"OM"},
+    paf:{short:"Pafos",          zh:"帕福斯",       c1:"#1d4ed8", c2:"#ffffff", abbr:"PAF"},
+    usg:{short:"Union SG",       zh:"圣吉罗斯",     c1:"#ffd700", c2:"#1d4ed8", abbr:"USG"},
+    psv:{short:"PSV",            zh:"埃因霍温",     c1:"#ed1c24", c2:"#ffffff", abbr:"PSV"},
+    ath:{short:"Athletic",       zh:"毕尔巴鄂",     c1:"#ee2523", c2:"#ffffff", abbr:"ATH"},
+    nap:{short:"Napoli",         zh:"那不勒斯",     c1:"#1d9bf0", c2:"#ffffff", abbr:"NAP"},
+    fck:{short:"Copenhagen",     zh:"哥本哈根",     c1:"#ffffff", c2:"#000000", abbr:"FCK"},
+    aja:{short:"Ajax",           zh:"阿贾克斯",     c1:"#d2122e", c2:"#ffffff", abbr:"AJA"},
+    fra:{short:"Eintracht",      zh:"法兰克福",     c1:"#1a1a1a", c2:"#e1000f", abbr:"FRA"},
+    sla:{short:"Slavia Praha",   zh:"布拉格斯拉维亚",c1:"#c8102e",c2:"#ffffff", abbr:"SLA"},
+    vil:{short:"Villarreal",     zh:"比利亚雷亚尔", c1:"#ffe667", c2:"#005187", abbr:"VIL"},
+    kai:{short:"Kairat",         zh:"海拉提",       c1:"#1d4ed8", c2:"#ffd700", abbr:"KAI"}
+  };
+
+// 淘汰赛对阵（scoreA/B = 两回合总比分；决赛为单场；legs = 鼠标悬停提示的两回合明细）
+const BRACKET = {
+    top:[
+      // 16 强赛
+      {round:"16强赛", a:CLUBS.psg, b:CLUBS.che, winner:"a", scoreA:8, scoreB:2,  legs:"巴黎 5-2 切尔西 · 次回合 巴黎 3-0 切尔西"},
+      {round:"16强赛", a:CLUBS.gal, b:CLUBS.liv, winner:"b", scoreA:1, scoreB:4,  legs:"加拉塔 1-0 利物浦 · 次回合 加拉塔 0-4 利物浦"},
+      {round:"16强赛", a:CLUBS.rma, b:CLUBS.mci, winner:"a", scoreA:5, scoreB:1,  legs:"皇马 3-0 曼城 · 次回合 皇马 2-1 曼城"},
+      {round:"16强赛", a:CLUBS.ata, b:CLUBS.bay, winner:"b", scoreA:2, scoreB:10, legs:"亚特兰大 1-6 拜仁 · 次回合 亚特兰大 1-4 拜仁"},
+      // 1/4 决赛
+      {round:"1/4决赛", a:CLUBS.psg, b:CLUBS.liv, winner:"a", scoreA:4, scoreB:0,  legs:"巴黎 2-0 利物浦 · 次回合 巴黎 2-0 利物浦"},
+      {round:"1/4决赛", a:CLUBS.rma, b:CLUBS.bay, winner:"b", scoreA:4, scoreB:6,  legs:"皇马 1-2 拜仁 · 次回合 皇马 3-4 拜仁"},
+      // 半决赛
+      {round:"半决赛", a:CLUBS.psg, b:CLUBS.bay, winner:"a", scoreA:6, scoreB:5,  legs:"巴黎 5-4 拜仁 · 次回合 巴黎 1-1 拜仁"}
+    ],
+    bottom:[
+      // 16 强赛
+      {round:"16强赛", a:CLUBS.new, b:CLUBS.bar, winner:"b", scoreA:3, scoreB:8,  legs:"纽卡 1-1 巴萨 · 次回合 纽卡 2-7 巴萨"},
+      {round:"16强赛", a:CLUBS.atm, b:CLUBS.tot, winner:"a", scoreA:7, scoreB:5,  legs:"马竞 5-2 热刺 · 次回合 马竞 2-3 热刺"},
+      {round:"16强赛", a:CLUBS.gli, b:CLUBS.spo, winner:"b", scoreA:3, scoreB:5,  legs:"博多 3-0 葡体 · 次回合 博多 0-5 葡体(加时)"},
+      {round:"16强赛", a:CLUBS.lev, b:CLUBS.ars, winner:"b", scoreA:1, scoreB:3,  legs:"勒沃 1-1 阿森纳 · 次回合 勒沃 0-2 阿森纳"},
+      // 1/4 决赛
+      {round:"1/4决赛", a:CLUBS.bar, b:CLUBS.atm, winner:"b", scoreA:2, scoreB:3,  legs:"巴萨 0-2 马竞 · 次回合 巴萨 2-1 马竞"},
+      {round:"1/4决赛", a:CLUBS.spo, b:CLUBS.ars, winner:"b", scoreA:0, scoreB:1,  legs:"葡体 0-1 阿森纳 · 次回合 葡体 0-0 阿森纳"},
+      // 半决赛
+      {round:"半决赛", a:CLUBS.atm, b:CLUBS.ars, winner:"b", scoreA:1, scoreB:2,  legs:"马竞 1-1 阿森纳 · 次回合 马竞 0-1 阿森纳"}
+    ]
+  };
+
+// 决赛 + 冠军（2026.05.30 普斯卡什竞技场：巴黎 1-1 阿森纳，点球 4-3，巴黎卫冕）
+const FINAL = {a:CLUBS.psg, b:CLUBS.ars, winner:"a", scoreA:1, scoreB:1, penA:4, penB:3};
+const CHAMP = CLUBS.psg;
+
+// 联赛阶段 36 队最终排名（每队 8 场；zone: r16=前8直通 po=9-24附加赛 out=25-36出局）
+const LEAGUE = [
+    {code:"ars",pld:8,w:8,d:0,l:0,gf:23,ga:4, pts:24, zone:"r16"},
+    {code:"bay",pld:8,w:7,d:0,l:1,gf:22,ga:8, pts:21, zone:"r16"},
+    {code:"liv",pld:8,w:6,d:0,l:2,gf:20,ga:8, pts:18, zone:"r16"},
+    {code:"tot",pld:8,w:5,d:2,l:1,gf:17,ga:7, pts:17, zone:"r16"},
+    {code:"bar",pld:8,w:5,d:1,l:2,gf:22,ga:14,pts:16, zone:"r16"},
+    {code:"che",pld:8,w:5,d:1,l:2,gf:17,ga:10,pts:16, zone:"r16"},
+    {code:"spo",pld:8,w:5,d:1,l:2,gf:17,ga:11,pts:16, zone:"r16"},
+    {code:"mci",pld:8,w:5,d:1,l:2,gf:15,ga:9, pts:16, zone:"r16"},
+    {code:"rma",pld:8,w:5,d:0,l:3,gf:21,ga:12,pts:15, zone:"po"},
+    {code:"int",pld:8,w:5,d:0,l:3,gf:15,ga:7, pts:15, zone:"po"},
+    {code:"psg",pld:8,w:4,d:2,l:2,gf:21,ga:11,pts:14, zone:"po"},
+    {code:"new",pld:8,w:4,d:2,l:2,gf:17,ga:7, pts:14, zone:"po"},
+    {code:"juv",pld:8,w:3,d:4,l:1,gf:14,ga:10,pts:13, zone:"po"},
+    {code:"atm",pld:8,w:4,d:1,l:3,gf:17,ga:15,pts:13, zone:"po"},
+    {code:"ata",pld:8,w:4,d:1,l:3,gf:10,ga:10,pts:13, zone:"po"},
+    {code:"lev",pld:8,w:3,d:3,l:2,gf:13,ga:14,pts:12, zone:"po"},
+    {code:"bvb",pld:8,w:3,d:2,l:3,gf:19,ga:17,pts:11, zone:"po"},
+    {code:"oly",pld:8,w:3,d:2,l:3,gf:10,ga:14,pts:11, zone:"po"},
+    {code:"bru",pld:8,w:3,d:1,l:4,gf:15,ga:17,pts:10, zone:"po"},
+    {code:"gal",pld:8,w:3,d:1,l:4,gf:9, ga:11,pts:10, zone:"po"},
+    {code:"mon",pld:8,w:2,d:4,l:2,gf:8, ga:14,pts:10, zone:"po"},
+    {code:"qar",pld:8,w:3,d:1,l:4,gf:13,ga:21,pts:10, zone:"po"},
+    {code:"gli",pld:8,w:2,d:3,l:3,gf:14,ga:15,pts:9,  zone:"po"},
+    {code:"ben",pld:8,w:3,d:0,l:5,gf:10,ga:12,pts:9,  zone:"po"},
+    {code:"mar",pld:8,w:3,d:0,l:5,gf:11,ga:14,pts:9,  zone:"out"},
+    {code:"paf",pld:8,w:2,d:3,l:3,gf:8, ga:11,pts:9,  zone:"out"},
+    {code:"usg",pld:8,w:3,d:0,l:5,gf:8, ga:17,pts:9,  zone:"out"},
+    {code:"psv",pld:8,w:2,d:2,l:4,gf:16,ga:16,pts:8,  zone:"out"},
+    {code:"ath",pld:8,w:2,d:2,l:4,gf:9, ga:14,pts:8,  zone:"out"},
+    {code:"nap",pld:8,w:2,d:2,l:4,gf:9, ga:15,pts:8,  zone:"out"},
+    {code:"fck",pld:8,w:2,d:2,l:4,gf:12,ga:21,pts:8,  zone:"out"},
+    {code:"aja",pld:8,w:2,d:0,l:6,gf:8, ga:21,pts:6,  zone:"out"},
+    {code:"fra",pld:8,w:1,d:1,l:6,gf:10,ga:21,pts:4,  zone:"out"},
+    {code:"sla",pld:8,w:0,d:3,l:5,gf:5, ga:19,pts:3,  zone:"out"},
+    {code:"vil",pld:8,w:0,d:1,l:7,gf:5, ga:18,pts:1,  zone:"out"},
+    {code:"kai",pld:8,w:0,d:1,l:7,gf:7, ga:22,pts:1,  zone:"out"}
+  ];
+</script>
+<script src="../js/engine.js"></script>
+<script src="../js/league-nav.js"></script>
+<script src="../js/ucl.js"></script>
+</body>
+</html>

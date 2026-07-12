@@ -1,0 +1,100 @@
+/* ==========================================================================
+   ucl.css - 欧冠页专属样式（cups/ucl.html）
+   依赖 base.css / league-nav.css / bracket.css / groups.css
+   1) 淘汰赛对阵图改用 DOM 队徽（非国旗），3 轮连接线高度重调
+   2) 联赛阶段 36 队积分榜（单表双栏，复用 groups.css 的 .gtable / 晋级配色）
+   3) engine.js 用到的 DOM 队徽样式（.badge-dom / .fbadge / .pf，本页未加载 standings.css）
+   ========================================================================== */
+
+/* ---------- DOM 队徽基础（engine 记分牌 / 结果卡 / 点球条 / 对阵行 共用）---------- */
+/* 记分牌大徽 */
+.flag .badge-dom{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:42px;height:30px;border-radius:4px;font-size:12px;font-weight:900;
+  box-shadow:0 2px 6px rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.25);
+  letter-spacing:.5px;
+}
+/* 结果卡大徽 */
+.final-team .fbadge{
+  width:48px;height:48px;display:flex;align-items:center;justify-content:center;
+  border-radius:10px;font-size:14px;font-weight:900;letter-spacing:.5px;
+  box-shadow:0 4px 12px rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.25);
+}
+/* 点球条前缀徽 */
+.pens-row .pf{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:22px;height:16px;border-radius:3px;font-size:8px;font-weight:900;
+  border:1px solid rgba(255,255,255,.2);flex:0 0 auto;letter-spacing:0;
+}
+
+/* ---------- 对阵图：队徽版（替代国旗 .mf）---------- */
+/* bracket.css 的 .mrow 用 .mf(img 国旗)；这里改用 .mbadge(色块队徽) */
+.mrow .mbadge{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:18px;height:18px;border-radius:3px;font-size:8px;font-weight:900;
+  border:1px solid rgba(255,255,255,.25);flex:0 0 auto;letter-spacing:0;
+}
+.pens-row .pf{margin-right:2px}
+
+/* ---------- 对阵图连接线高度重调（3 轮：16强=4场 / 1/4=2场 / 半决赛=1场）----------
+   bracket.css 默认按世界杯 4 轮调（r1=35 r2=70 r3=140）。
+   欧冠每轮队伍数 = 世界杯的「下一轮」，故整体上移一档：
+   16强赛(r1,4场) 母线 70px · 1/4决赛(r2,2场) 母线 140px · 半决赛(r3,1场) 末轮无连接线 */
+.col.r1 .match:nth-child(odd)::before,
+.col.r1 .match:nth-child(even)::before{height:70px}
+.col.r2 .match:nth-child(odd)::before,
+.col.r2 .match:nth-child(even)::before{height:140px}
+/* r3 为半决赛（末轮），bracket.js 已给 last 不加 has-next，无需连接线 */
+/* 列高保持 bracket.css 默认 560px（4 场 / 2 场在该高度下母线恰为 70 / 140）*/
+
+/* ---------- 联赛阶段积分榜 ---------- */
+.league-body{
+  display:flex;gap:14px;align-items:flex-start;justify-content:center;
+}
+.league-table{
+  flex:1 1 0;min-width:0;
+  background:linear-gradient(180deg,#15281c,#0b1810);
+  border:1px solid rgba(255,255,255,.12);border-radius:12px;
+  padding:10px 10px 8px;box-shadow:0 6px 20px rgba(0,0,0,.4);
+}
+/* 单表表头（复用 .gtable，但加上排名/球队/赛/胜/平/负/进/失/净/积）*/
+.league-table .gtable td.gtm{max-width:150px}
+.league-table tbody tr{cursor:pointer;transition:background .12s}
+.league-table tbody tr:hover{background:rgba(255,211,77,.1)}
+/* 选队高亮（复用联赛页交互：金=主队 蓝=客队）*/
+.league-table tbody tr.lhome{background:rgba(255,211,77,.22);box-shadow:inset 3px 0 0 var(--gold)}
+.league-table tbody tr.laway{background:rgba(74,163,255,.22);box-shadow:inset 3px 0 0 #4aa3ff}
+.league-table tbody tr.lhome.adv-auto,
+.league-table tbody tr.laway.adv-auto{background:rgba(255,211,77,.28)}
+.league-table .gtable td.gtm .mbadge{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:20px;height:20px;border-radius:4px;font-size:9px;font-weight:900;
+  margin-right:6px;border:1px solid rgba(255,255,255,.2);letter-spacing:0;
+}
+
+/* ---------- 联赛阶段分区配色（复用 groups.css .adv-auto/.adv-third/.adv-out）
+   前 8 = 直通 16 强(绿) · 9-24 = 附加赛(金) · 25-36 = 出局(暗) ---------- */
+/* groups.css 已定义，此处仅微调：出局行保留可读性，不降透明度太多 */
+.gtable tbody tr.adv-out{opacity:.6}
+
+/* ---------- 冠军柱：决赛已赛，显示冠军队徽 + 决赛比分 ---------- */
+.trophy-column .trophy-champ{
+  display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:4px;
+}
+.trophy-column .trophy-champ .fbadge{
+  width:54px;height:54px;font-size:15px;
+}
+.trophy-column .trophy-champ-name{
+  font-size:15px;font-weight:900;letter-spacing:1px;color:var(--gold);
+  text-shadow:0 0 12px rgba(255,211,77,.55);
+}
+.trophy-column .trophy-score{
+  font-size:12px;font-weight:700;color:#fff;opacity:.92;letter-spacing:.5px;
+  text-align:center;line-height:1.4;
+}
+
+/* ---------- 响应式 ---------- */
+@media(max-width:960px){
+  .league-body{flex-direction:column}
+  .league-table{flex:0 0 auto;width:100%}
+}
