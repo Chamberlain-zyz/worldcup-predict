@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>⚽ 西甲小游戏</title>
-<link rel="stylesheet" href="css/base.css">
-<link rel="stylesheet" href="css/league-nav.css">
-<link rel="stylesheet" href="css/standings.css">
+<title>⚽ 意甲小游戏</title>
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/league-nav.css">
+<link rel="stylesheet" href="../css/standings.css">
 </head>
 <body>
-  <h1>⚽ 西甲小游戏</h1>
+  <h1>⚽ 意甲小游戏</h1>
   <div class="subtitle">点击积分榜选主客队 / 空格随机；进球得分，90 分钟平局各得 1 分</div>
 
   <div class="layout">
     <!-- 左：积分榜 -->
     <aside class="table-side">
       <div class="season-bar">
-        <div class="table-head">🏆 LaLiga 积分榜</div>
+        <div class="table-head">🏆 Serie A 积分榜</div>
         <select id="seasonSel" class="season-select" title="选择赛季"></select>
       </div>
       <div class="table-hint" id="seasonSub">2025/26 赛季 · 点第一行=主队 第二行=客队 再点取消</div>
@@ -78,7 +78,7 @@
         <canvas id="pitch" width="640" height="640"></canvas>
         <div class="goal-flash" id="goalFlash">GOAL!</div>
         <div class="overlay" id="overlay">
-          <h2 id="overlayTitle">⚽ 西甲小游戏</h2>
+          <h2 id="overlayTitle">⚽ 意甲小游戏</h2>
           <div id="overlayBody" style="opacity:.85;font-size:14px;line-height:1.7">
             点击左侧积分榜任意两支球队<br>依次为主队 / 客队<br>或按 <b>空格键</b> 随机抽两队对战
           </div>
@@ -86,15 +86,15 @@
         </div>
       </div>
 
-      <div class="final-seat">🏆 圣地亚哥·伯纳乌 · 卡尔德隆 · 诺坎普</div>
+      <div class="final-seat">🏆 圣西罗 · 奥林匹克球场 · 迭戈·马拉多纳</div>
       <div class="hint">物理弹球模拟 · 加速计时 · 平局各 1 分 · 空格键随机开始</div>
     </main>
   </div>
 
-<!-- 球队元数据 + 近 5 赛季积分榜已外置到 data/spain-data.js（standings.js 读取全局 CLUBS/SEASONS/ZONE） -->
-<script src="data/spain-data.js"></script>
-<script src="js/engine.js"></script>
-<script src="js/league-nav.js"></script>
-<script src="js/standings.js"></script>
+<!-- 球队元数据 + 近 5 赛季积分榜已外置到 data/italy-data.js（standings.js 读取全局 CLUBS/SEASONS/ZONE） -->
+<script src="../data/italy-data.js"></script>
+<script src="../js/engine.js"></script>
+<script src="../js/league-nav.js"></script>
+<script src="../js/standings.js"></script>
 </body>
 </html>

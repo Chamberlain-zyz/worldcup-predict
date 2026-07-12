@@ -15,6 +15,11 @@
   text-align:center;padding-bottom:6px;margin-bottom:2px;
   border-bottom:1px solid rgba(255,255,255,.1);
 }
+/* 二级分组标题（杯赛等），比顶栏稍轻 */
+.league-nav .lg-head-sub{
+  font-size:12px;padding-top:2px;padding-bottom:4px;margin-top:2px;
+  border-bottom:none;opacity:.85;
+}
 .league-nav .lg-item{
   display:flex;align-items:center;gap:8px;
   padding:8px 10px;border-radius:10px;text-decoration:none;color:#fff;
