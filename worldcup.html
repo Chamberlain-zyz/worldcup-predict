@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/league-nav.css">
 <link rel="stylesheet" href="css/bracket.css">
+<link rel="stylesheet" href="css/groups.css">
 </head>
 <body>
   <h1>⚽ 世界杯小游戏</h1>
@@ -83,6 +84,18 @@
       </div>
       <div class="bracket mirror" id="bracketBottom"></div>
     </aside>
+  </section>
+
+  <!-- 小组赛积分榜（12 组）-->
+  <section class="groups-section">
+    <div class="groups-title">🌍 小组赛积分榜</div>
+    <div class="groups-sub">2026 美加墨世界杯 · 12 组共 48 队 · 每组前 2 直接晋级 32 强，另加 8 个成绩最好的第 3 名</div>
+    <div class="groups-legend">
+      <span><i class="lg-dot" style="background:rgba(61,219,106,.6);border-color:#3ddb6a"></i>前 2 名 · 直接晋级</span>
+      <span><i class="lg-dot" style="background:rgba(255,211,77,.55);border-color:#ffd34d"></i>最佳第 3 名 · 晋级</span>
+      <span><i class="lg-dot" style="background:rgba(255,255,255,.08)"></i>小组淘汰</span>
+    </div>
+    <div class="groups-grid" id="groupsGrid"></div>
   </section>
 
 <script>
@@ -170,5 +183,6 @@ const NAME_ZH = {
 <script src="js/engine.js"></script>
 <script src="js/league-nav.js"></script>
 <script src="js/bracket.js"></script>
+<script src="js/groups.js"></script>
 </body>
 </html>
