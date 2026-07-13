@@ -1,6 +1,6 @@
 /* ==========================================================================
    ucl.js - 欧冠页逻辑（cups/ucl.html 专属）
-   依赖：页面内联定义全局 CLUBS / BRACKET / LEAGUE，以及 js/engine.js
+   依赖：js/badge.js（队徽工具）、js/engine.js，以及页面内联定义的全局 CLUBS / BRACKET / LEAGUE
    CLUBS   : { code:{short,zh,c1,c2,abbr}, ... }          36 队元数据
    BRACKET : { top:[...], bottom:[...] }                  淘汰赛对阵（scoreA/B=两回合总比分）
    LEAGUE  : [ {code,pld,w,d,l,gf,ga,pts,zone}, ... ]     联赛阶段 36 队排名
@@ -10,47 +10,9 @@
 (function(){
   "use strict";
 
-  // ---------- 队徽工具：颜色亮度判定（同 standings.js）----------
-  function isLight(hex){
-    const c = hex.replace("#","");
-    const r=parseInt(c.length===3?c[0]+c[0]:c.slice(0,2),16);
-    const g=parseInt(c.length===3?c[1]+c[1]:c.slice(2,4),16);
-    const b=parseInt(c.length===3?c[2]+c[2]:c.slice(4,6),16);
-    return (0.299*r+0.587*g+0.114*b) > 180;
-  }
-  // canvas 版球身：整颗球用队伍主色铺底 + 缩写字母（engine 已裁剪到圆内）
-  function drawBadgeToCanvas(ctx, team, size){
-    const s = size*2;
-    ctx.fillStyle = team.c1;
-    ctx.fillRect(-s, -s, s*2, s*2);
-    const light = isLight(team.c1);
-    ctx.fillStyle = light ? team.c2 : "#ffffff";
-    ctx.strokeStyle = light ? "rgba(0,0,0,.5)" : "rgba(0,0,0,.6)";
-    ctx.lineWidth = 1.5;
-    ctx.font = "900 " + Math.round(size*0.62) + "px 'Segoe UI',system-ui,sans-serif";
-    ctx.textAlign="center"; ctx.textBaseline="middle";
-    ctx.strokeText(team.abbr, 0, 1);
-    ctx.fillText(team.abbr, 0, 1);
-  }
-  // DOM 版队徽：记分牌 / 积分榜 / 结果卡 / 点球条 / 对阵行 共用
-  function badgeDomHTML(team, size, cls){
-    const light = isLight(team.c1);
-    const fg = light ? team.c2 : "#ffffff";
-    const style = `background:${team.c1};color:${fg};` +
-                  (size ? `width:${size}px;height:${size*0.72}px;font-size:${Math.max(9,Math.round(size*0.28))}px;` : "");
-    return `<span class="${cls||"badge"}" style="${style}">${team.abbr}</span>`;
-  }
-
-  // ---------- TEAM 适配器（队徽版，供 engine.js 用）----------
-  const TEAM = {
-    all: Object.values(CLUBS),
-    name: t => t.zh,
-    titleName: t => t.zh,
-    badge: (t, size, cls) => badgeDomHTML(t, size, cls),
-    bigBadge: t => badgeDomHTML(t, 48, "fbadge"),
-    pensMark: t => badgeDomHTML(t, 0, "pf"),
-    drawOnCanvas: (ctx, ball, R) => drawBadgeToCanvas(ctx, ball.ref, R-6),
-  };
+  // ---------- 队徽工具（来自 js/badge.js）----------
+  const badgeDomHTML = Badge.badgeDomHTML;
+  const TEAM = Badge.makeBadgeTeamAdapter(CLUBS);
 
   // ---------- 球队对象 -> code 反查表（CLUBS 项不含自身 code，需反查）----------
   const CODE_OF = new Map();

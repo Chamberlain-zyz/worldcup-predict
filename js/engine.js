@@ -208,6 +208,7 @@ window.initEngine = function(TEAM, opts){
         state.matchMin = 90;
         if(FORCE_PENS){
           enterPens();
+          return;
         } else if(FORCE_EXTRA){
           state.extra = true;
           state.extraStart = now;
@@ -233,8 +234,10 @@ window.initEngine = function(TEAM, opts){
         state.matchMin = 120;
         if(FORCE_PENS){
           enterPens();
+          return;
         } else if(state.scoreA === state.scoreB && ALLOW_PENS){
           enterPens();
+          return;
         } else {
           state.finished = true;
         }
@@ -866,6 +869,10 @@ window.initEngine = function(TEAM, opts){
   }
 
   function doStart(){
+    // 遮罩隐藏 = 比赛已开始，忽略重复触发
+    // （按钮聚焦时按空格会先触发 keydown 开赛、再触发按钮原生 click，
+    //   若不拦截第二次调用会以 pending=null 随机开赛，吞掉用户已选定的对阵）
+    if(elOverlay.classList.contains("hidden")) return;
     if(pending){
       const [a,b]=pending; pending=null;
       start(a, b);
