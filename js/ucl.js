@@ -24,62 +24,23 @@
   function zhName(t){ return t.zh; }
   function isTBD(t){ return t === TBD; }
 
-  // ==================== 对阵图 ====================
-  const ROUND_ORDER = ["16强赛","1/4决赛","半决赛"];
-
-  // 单场对阵 HTML：两行，各带队徽 + 名 + 总比分（含点球则括注）
-  function matchHTML(m){
-    const aT = m.a, bT = m.b;
-    const aTBD = isTBD(aT), bTBD = isTBD(bT);
-    const wa = m.winner==='a', wb = m.winner==='b';
-    const clsA = aTBD ? "tbd" : (wa ? "win" : (wb ? "lose" : ""));
-    const clsB = bTBD ? "tbd" : (wb ? "win" : (wa ? "lose" : ""));
-    const sa = (!aTBD && m.scoreA!=null) ? (m.penA!=null ? `${m.scoreA}(${m.penA})` : m.scoreA) : "";
-    const sb = (!bTBD && m.scoreB!=null) ? (m.penB!=null ? `${m.scoreB}(${m.penB})` : m.scoreB) : "";
-    const tip = m.legs ? m.legs.replace(/"/g,'&quot;') : "";
-    const rowA = `<div class="mrow ${clsA}" title="${tip}">${aTBD?'':badgeDomHTML(aT,0,"mbadge")}<span class="mn">${zhName(aT)}</span><span class="ms">${sa}</span></div>`;
-    const rowB = `<div class="mrow ${clsB}" title="${tip}">${bTBD?'':badgeDomHTML(bT,0,"mbadge")}<span class="mn">${zhName(bT)}</span><span class="ms">${sb}</span></div>`;
-    return rowA + rowB;
-  }
-
-  function renderHalf(list){
-    const byRound = {};
-    ROUND_ORDER.forEach(r=>byRound[r]=[]);
-    list.forEach(m=>{ if(byRound[m.round]) byRound[m.round].push(m); });
-    let html = "";
-    ROUND_ORDER.forEach((r,idx)=>{
-      const last = idx===ROUND_ORDER.length-1;
-      const cls = "col r"+(idx+1) + (last?"":" has-next");
-      html += `<div class="${cls}">`;
-      byRound[r].forEach(m=>{
-        const isTBDMatch = isTBD(m.a) || isTBD(m.b);
-        if(isTBDMatch){
-          html += `<div class="match disabled">${matchHTML(m)}</div>`;
-        }else{
-          html += `<button class="match" data-ac="${codeOf(m.a)}" data-bc="${codeOf(m.b)}">${matchHTML(m)}</button>`;
-        }
-      });
-      html += `</div>`;
-      if(!last) html += `<div class="gap"></div>`;
-    });
-    return html;
-  }
-
-  function renderBracket(){
-    document.getElementById("bracketTop").innerHTML = renderHalf(BRACKET.top);
-    document.getElementById("bracketBottom").innerHTML = renderHalf(BRACKET.bottom);
-    const all = document.querySelectorAll(".match[data-ac]");
-    all.forEach(el=>{
-      el.addEventListener("click", ()=>{
-        all.forEach(x=>x.classList.remove("active"));
-        el.classList.add("active");
-        clearTableSelection();           // 点对阵图 = 清掉积分榜选队
-        const tA = CLUBS[el.dataset.ac], tB = CLUBS[el.dataset.bc];
-        engine.previewMatch(tA, tB);
-      });
+  // ==================== 对阵图（复用 js/bracket-render.js 公共模块）====================
+  // 队伍为 CLUBS[code] 对象，占位队为 TBD；队标用队徽，多一层 legs tooltip。
+  // renderBracket 在下方 clearTableSelection 定义后创建（见 buildBracket）。
+  let renderBracket = null;
+  function buildBracket(){
+    renderBracket = BracketRender.create({
+      roundOrder: ["16强赛","1/4决赛","半决赛"],
+      isTBD: t => isTBD(t),
+      teamName: t => zhName(t),
+      // TBD 不渲染队徽，其余渲染队徽
+      teamMark: t => isTBD(t) ? "" : badgeDomHTML(t, 0, "mbadge"),
+      tipOf: m => m.legs ? m.legs.replace(/"/g, '&quot;') : "",
+      dataAttrs: m => `data-ac="${codeOf(m.a)}" data-bc="${codeOf(m.b)}"`,
+      resolveTeams: el => [CLUBS[el.dataset.ac], CLUBS[el.dataset.bc]],
+      onBeforePreview: () => clearTableSelection(),   // 点对阵图 = 清掉积分榜选队
     });
   }
-
   // ---------- 冠军柱（决赛已赛：显示冠军队徽 + 决赛比分）----------
   function renderChampion(){
     const champEl = document.getElementById("trophyChamp");
@@ -188,7 +149,8 @@
     allowPens: true      // 加时仍平进点球
   });
 
-  renderBracket();
+  buildBracket();
+  renderBracket(BRACKET, engine);
   renderChampion();
   renderLeague();
 })();

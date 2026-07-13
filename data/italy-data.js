@@ -1,5 +1,6 @@
 /* italy-data.js - 意甲球队元数据 + 近 5 赛季积分榜
-   从 italy.html 抽出；standings.js 直接读取全局 CLUBS / SEASONS / ZONE */
+   由 leagues/league.html?c=italy 加载；standings.js 读取全局 CLUBS / SEASONS / ZONE
+   空赛季（全 0）用 season-util.js 的 emptySeason() 生成，不再手抄整表 */
 const CLUBS = {
     int:{short:"Inter",         zh:"国际米兰",     c1:"#0033a0", c2:"#000000", abbr:"INT"},
     mil:{short:"Milan",         zh:"AC米兰",       c1:"#fb090b", c2:"#000000", abbr:"MIL"},
@@ -30,28 +31,10 @@ const CLUBS = {
     pis:{short:"Pisa",          zh:"比萨",         c1:"#003c99", c2:"#ffffff", abbr:"PIS"}
   };
 const SEASONS = [
-    {label:"2026/27", clubs:[
-      {code:"int",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"nap",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"rom",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"com",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"mil",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"juv",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"ata",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"bol",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"laz",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"udi",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"sas",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"tor",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"par",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"cag",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"fio",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"gen",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"lec",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"cre",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"ver",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"pis",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0}
-    ]},
+    {label:"2026/27", clubs: emptySeason([
+      "int","nap","rom","com","mil","juv","ata","bol","laz","udi",
+      "sas","tor","par","cag","fio","gen","lec","cre","ver","pis"
+    ])},
     {label:"2025/26", clubs:[
       {code:"int",pld:38,w:27,d:6,l:5,gf:89,ga:35,pts:87},
       {code:"nap",pld:38,w:23,d:7,l:8,gf:58,ga:36,pts:76},

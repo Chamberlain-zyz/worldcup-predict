@@ -1,5 +1,6 @@
 /* france-data.js - 法甲球队元数据 + 近 5 赛季积分榜
-   从 france.html 抽出；standings.js 直接读取全局 CLUBS / SEASONS / ZONE */
+   由 leagues/league.html?c=france 加载；standings.js 读取全局 CLUBS / SEASONS / ZONE
+   空赛季（全 0）用 season-util.js 的 emptySeason() 生成，不再手抄整表 */
 const CLUBS = {
     psg:{short:"Paris SG",     zh:"巴黎圣日耳曼", c1:"#004170", c2:"#dc052d", abbr:"PSG"},
     mar:{short:"Marseille",    zh:"马赛",         c1:"#009ddc", c2:"#ffffff", abbr:"OM" },
@@ -28,26 +29,10 @@ const CLUBS = {
     bor:{short:"Bordeaux",     zh:"波尔多",       c1:"#013d84", c2:"#ffffff", abbr:"BDX"}
   };
 const SEASONS = [
-    {label:"2026/27", clubs:[
-      {code:"psg",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"len",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"lil",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"lyo",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"mar",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"ren",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"mon",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"str",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"tou",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"lor",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"par",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"bre",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"ang",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"hav",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"aux",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"nic",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"nan",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"met",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0}
-    ]},
+    {label:"2026/27", clubs: emptySeason([
+      "psg","len","lil","lyo","mar","ren","mon","str","tou","lor",
+      "par","bre","ang","hav","aux","nic","nan","met"
+    ])},
     {label:"2025/26", clubs:[
       {code:"psg",pld:34,w:24,d:4,l:6,gf:74,ga:29,pts:76},
       {code:"len",pld:34,w:22,d:4,l:8,gf:66,ga:35,pts:70},

@@ -1,5 +1,6 @@
 /* england-data.js - 英超球队元数据 + 近 5 赛季积分榜
-   从 england.html 抽出；standings.js 直接读取全局 CLUBS / SEASONS / ZONE */
+   由 leagues/league.html?c=england 加载；standings.js 读取全局 CLUBS / SEASONS / ZONE
+   空赛季（全 0）用 season-util.js 的 emptySeason() 生成，不再手抄整表 */
 const CLUBS = {
     mci:{short:"Man City",       zh:"曼城",         c1:"#6cabdd", c2:"#ffffff", abbr:"MCI"},
     liv:{short:"Liverpool",      zh:"利物浦",       c1:"#c8102e", c2:"#ffffff", abbr:"LIV"},
@@ -30,28 +31,10 @@ const CLUBS = {
     wat:{short:"Watford",        zh:"沃特福德",     c1:"#fbee23", c2:"#ed2127", abbr:"WAT"}
   };
 const SEASONS = [
-    {label:"2026/27", clubs:[
-      {code:"ars",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"mci",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"mun",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"avl",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"liv",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"bou",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"sun",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"bha",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"bre",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"che",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"ful",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"new",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"eve",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"lee",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"cry",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"nfo",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"tot",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"whu",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"bur",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"wol",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0}
-    ]},
+    {label:"2026/27", clubs: emptySeason([
+      "ars","mci","mun","avl","liv","bou","sun","bha","bre","che",
+      "ful","new","eve","lee","cry","nfo","tot","whu","bur","wol"
+    ])},
     {label:"2025/26", clubs:[
       {code:"ars",pld:38,w:26,d:7,l:5,gf:71,ga:27,pts:85},
       {code:"mci",pld:38,w:23,d:9,l:6,gf:77,ga:35,pts:78},

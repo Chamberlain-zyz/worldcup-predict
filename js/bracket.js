@@ -62,61 +62,20 @@
     },
   };
 
-  // ---------- 对阵图渲染 ----------
-  const TBD = ["待定","_tbd","❓"];
-  const ROUND_ORDER = ["32强赛","16强赛","1/4决赛","半决赛"];
-
-  function matchHTML(m){
-    const aTBD = m.a[1]==="_tbd", bTBD = m.b[1]==="_tbd";
-    const wa = m.winner==='a', wb = m.winner==='b';
-    const clsA = aTBD ? "tbd" : (wa ? "win" : (wb ? "lose" : ""));
-    const clsB = bTBD ? "tbd" : (wb ? "win" : (wa ? "lose" : ""));
-    const sa = (!aTBD && m.scoreA!=null) ? (m.penA!=null ? `${m.scoreA}(${m.penA})` : m.scoreA) : "";
-    const sb = (!bTBD && m.scoreB!=null) ? (m.penB!=null ? `${m.scoreB}(${m.penB})` : m.scoreB) : "";
-    return `<div class="mrow ${clsA}">${smallFlag(m.a[1],m.a[2])}<span class="mn">${zhName(m.a)}</span><span class="ms">${sa}</span></div>`
-         + `<div class="mrow ${clsB}">${smallFlag(m.b[1],m.b[2])}<span class="mn">${zhName(m.b)}</span><span class="ms">${sb}</span></div>`;
-  }
-
-  function renderHalf(list){
-    const byRound = {};
-    ROUND_ORDER.forEach(r=>byRound[r]=[]);
-    list.forEach(m=>{ if(byRound[m.round]) byRound[m.round].push(m); });
-    let html = "";
-    ROUND_ORDER.forEach((r,idx)=>{
-      const last = idx===ROUND_ORDER.length-1;
-      const cls = "col r"+(idx+1) + (last?"":" has-next");
-      html += `<div class="${cls}">`;
-      byRound[r].forEach(m=>{
-        const isTBD = m.a[1]==="_tbd" || m.b[1]==="_tbd";
-        if(isTBD){
-          html += `<div class="match disabled">${matchHTML(m)}</div>`;
-        }else{
-          html += `<button class="match" data-a="${m.a[0]}|${m.a[1]}|${m.a[2]}"
-                           data-b="${m.b[0]}|${m.b[1]}|${m.b[2]}">${matchHTML(m)}</button>`;
-        }
-      });
-      html += `</div>`;
-      if(!last) html += `<div class="gap"></div>`;
-    });
-    return html;
-  }
-
-  function renderBracket(){
-    document.getElementById("bracketTop").innerHTML = renderHalf(BRACKET.top);
-    document.getElementById("bracketBottom").innerHTML = renderHalf(BRACKET.bottom);
-    const all = document.querySelectorAll(".match[data-a]");
-    all.forEach(el=>{
-      el.addEventListener("click", ()=>{
-        all.forEach(x=>x.classList.remove("active"));
-        el.classList.add("active");
-        const pa = el.dataset.a.split("|"), pb = el.dataset.b.split("|");
-        engine.previewMatch(pa, pb);
-      });
-    });
-  }
-
   // ---------- 初始化引擎（世界杯：无积分榜选队，故无清选队回调 / 无取消预览）----------
   const engine = initEngine(TEAM, {});
 
-  renderBracket();
+  // ---------- 对阵图渲染（复用 js/bracket-render.js 公共模块）----------
+  // 队伍标识为数组 [英文名, ISO代码, emoji]，占位队 ISO 代码为 "_tbd"。
+  const renderBracket = BracketRender.create({
+    roundOrder: ["32强赛","16强赛","1/4决赛","半决赛"],
+    isTBD: t => t[1] === "_tbd",
+    teamName: t => zhName(t),
+    teamMark: t => smallFlag(t[1], t[2]),
+    // 把 [name,code,emoji] 编入 data 属性，点击时按 "|" 还原
+    dataAttrs: m => `data-a="${m.a[0]}|${m.a[1]}|${m.a[2]}" data-b="${m.b[0]}|${m.b[1]}|${m.b[2]}"`,
+    resolveTeams: el => [el.dataset.a.split("|"), el.dataset.b.split("|")],
+  });
+
+  renderBracket(BRACKET, engine);
 })();

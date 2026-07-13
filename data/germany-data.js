@@ -1,5 +1,6 @@
 /* germany-data.js - 德甲球队元数据 + 近 5 赛季积分榜
-   从 germany.html 抽出；standings.js 直接读取全局 CLUBS / SEASONS / ZONE */
+   由 leagues/league.html?c=germany 加载；standings.js 读取全局 CLUBS / SEASONS / ZONE
+   空赛季（全 0）用 season-util.js 的 emptySeason() 生成，不再手抄整表 */
 const CLUBS = {
     bay:{short:"Bayern",         zh:"拜仁慕尼黑",   c1:"#dc052d", c2:"#0066b2", abbr:"BAY"},
     bvb:{short:"Dortmund",       zh:"多特蒙德",     c1:"#fde100", c2:"#000000", abbr:"BVB"},
@@ -29,26 +30,10 @@ const CLUBS = {
     ber:{short:"Union Berlin",   zh:"柏林联合",     c1:"#eb1923", c2:"#ffed00", abbr:"BER"}
   };
 const SEASONS = [
-    {label:"2026/27", clubs:[
-      {code:"bay",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"bvb",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"rbl",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"stu",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"hof",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"lev",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"frb",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"fra",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"aug",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"m05",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"uni",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"bmg",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"hbg",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"kol",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"wer",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"wol",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"hei",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0},
-      {code:"stp",pld:0,w:0,d:0,l:0,gf:0,ga:0,pts:0}
-    ]},
+    {label:"2026/27", clubs: emptySeason([
+      "bay","bvb","rbl","stu","hof","lev","frb","fra","aug","m05",
+      "uni","bmg","hbg","kol","wer","wol","hei","stp"
+    ])},
     {label:"2025/26", clubs:[
       {code:"bay",pld:34,w:28,d:5,l:1,gf:122,ga:36,pts:89},
       {code:"bvb",pld:34,w:22,d:7,l:5,gf:70,ga:34,pts:73},
