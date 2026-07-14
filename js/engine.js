@@ -70,7 +70,7 @@ window.initEngine = function(TEAM, opts){
   const BASE = 480;           // 基础速率（= TARGET_SP）。势均力敌时两队都用此速率
   const RATING_D  = 40;        // Elo 分母：越大越接近 50/50，越小差距拉得越开（主手感旋钮）
   const UPSET     = 0.30;     // 冷门旋钮(0~1)：把强队份额往 0.5 拉，保留爆冷空间
-  const SPREAD    = 96;       // 最大速率差幅度：强队 BASE+SPREAD、弱队 BASE-SPREAD（±20% 起步）
+  const SPREAD    = 192;      // 最大速率差幅度：强队 BASE+SPREAD、弱队 BASE-SPREAD（±40%，差距明显但弱队不致过慢）
   const PEN_RATING_AMP = 0.15; // 点球命中率按实力份额浮动幅度（次要，常规时间速率差优先）
 
   const PEN_GOAL_P = 0.72,
