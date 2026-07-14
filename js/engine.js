@@ -60,17 +60,19 @@ window.initEngine = function(TEAM, opts){
   const KICKOFF_PAUSE = 1.0;
   const TARGET_SP = 480;
 
-  // ---------- 球队实力差异（速度差异）----------
+  // ---------- 球队实力差异（速度差异 + 轻量转向）----------
   // 引擎经 TEAM.rating(t) 读取球队实力评分：
   //   联赛页 = 当前赛季积分 pts（+ 净胜球 gf-ga 微调）；欧冠页 = 联赛阶段积分；世界杯页无数据。
-  // 两队 rating 不存在或相等 -> 两队速率都 = BASE，退回原始 50/50（与原引擎完全一致）。
-  // 否则把 rating 差经 Elo logistic 映射成强队“进球份额” sAp，再按不对称度换算成两球目标速率：
-  //   强队球更快 -> 单位时间飞更长 -> 更频繁撞墙（进球判定）-> 进球更多；弱队球慢、仍偶胜。
-  // 只改速率、不改方向、不改进球判定，无“突然变向”，观感物理直觉。速率关于 BASE 对称，平均节奏不变。
+  // 两队 rating 不存在或相等 -> 两队速率都 = BASE、增益 0，退回原始 50/50（与原引擎完全一致）。
+  // 否则把 rating 差经 Elo logistic 映射成强队“进球份额” sAp，再按不对称度换算成两球目标速率 + 轻量转向增益：
+  //   1) 速度差异为主：强队球更快 -> 更频繁撞墙 -> 进球更多；
+  //   2) 转向为辅：强队球每帧把速度方向朝球门中心轻掰一点（STEER_MAX 很小，仅辅助，几乎看不出“找门”）。
+  // 只改速率+轻量方向、不改进球判定。势均力敌时与原引擎完全一致。速率关于 BASE 对称，平均节奏不变。
   const BASE = 480;           // 基础速率（= TARGET_SP）。势均力敌时两队都用此速率
   const RATING_D  = 40;        // Elo 分母：越大越接近 50/50，越小差距拉得越开（主手感旋钮）
   const UPSET     = 0.30;     // 冷门旋钮(0~1)：把强队份额往 0.5 拉，保留爆冷空间
   const SPREAD    = 192;      // 最大速率差幅度：强队 BASE+SPREAD、弱队 BASE-SPREAD（±40%，差距明显但弱队不致过慢）
+  const STEER_MAX = 0.15;     // 强队最大转向增益（rad/s，仅辅助）：很轻，约为纯转向方案的 1/7，几乎看不出“找门”
   const PEN_RATING_AMP = 0.15; // 点球命中率按实力份额浮动幅度（次要，常规时间速率差优先）
 
   const PEN_GOAL_P = 0.72,
@@ -105,25 +107,30 @@ window.initEngine = function(TEAM, opts){
     return [a,b];
   }
 
-  // 计算两队实力份额与目标速率。无 rating / rating 缺失 / 两队相等 -> [BASE, BASE]（50/50）。
-  // sAp 为 tA 的“进球份额”（0~1，0.5=势均力敌）。速率按不对称度连续映射：
-  //   势均力敌(asym=0) -> 两队速率皆 BASE（与原始 50/50 完全一致，视觉无变化）；
-  //   越悬殊 -> 强队趋向 BASE+SPREAD、弱队趋向 BASE-SPREAD。
+  // 计算两队实力份额、目标速率与转向增益。无 rating / rating 缺失 / 两队相等 -> 速率 [BASE,BASE]、增益 [0,0]（50/50）。
+  // sAp 为 tA 的“进球份额”（0~1，0.5=势均力敌）。速率与增益都按不对称度连续映射：
+  //   势均力敌(asym=0) -> 速率皆 BASE、增益皆 0（与原始 50/50 完全一致，视觉无变化）；
+  //   越悬殊 -> 强队速率趋向 BASE+SPREAD 且获得转向增益 STEER_MAX*asym；弱队速率趋向 BASE-SPREAD、无转向增益。
+  // 转向只给强队：弱队球本就慢，若再加转向会“找门”反而更准，违背弱队弱的设计。
   function computeStrength(tA, tB){
-    if(typeof TEAM.rating !== "function") return {sAp:0.5, speeds:[BASE, BASE]};
+    if(typeof TEAM.rating !== "function") return {sAp:0.5, speeds:[BASE, BASE], gains:[0,0]};
     let Ra, Rb;
     try { Ra = TEAM.rating(tA); Rb = TEAM.rating(tB); }
-    catch(e){ return {sAp:0.5, speeds:[BASE, BASE]}; }
-    if(!isFinite(Ra) || !isFinite(Rb) || Ra === Rb) return {sAp:0.5, speeds:[BASE, BASE]};
+    catch(e){ return {sAp:0.5, speeds:[BASE, BASE], gains:[0,0]}; }
+    if(!isFinite(Ra) || !isFinite(Rb) || Ra === Rb) return {sAp:0.5, speeds:[BASE, BASE], gains:[0,0]};
     const sA = 1 / (1 + Math.pow(10, -(Ra - Rb)/RATING_D));   // Elo logistic：tA 进球份额
     const sAp = lerp(sA, 0.5, UPSET);                          // 冷门旋钮：往 0.5 拉
     const sBp = 1 - sAp;
     const asym = Math.abs(sAp - 0.5) * 2;                       // 0=势均力敌 1=最悬殊
     const spStrong = BASE + SPREAD * asym;
     const spWeak   = BASE - SPREAD * asym;
+    const gainStrong = STEER_MAX * asym;
+    const gainWeak   = 0;                                       // 弱队无转向增益
     const spA = sAp >= sBp ? spStrong : spWeak;
     const spB = sAp >= sBp ? spWeak : spStrong;
-    return {sAp:sAp, speeds:[spA, spB]};
+    const gainA = sAp >= sBp ? gainStrong : gainWeak;
+    const gainB = sAp >= sBp ? gainWeak : gainStrong;
+    return {sAp:sAp, speeds:[spA, spB], gains:[gainA, gainB]};
   }
 
   function makeBall(ref, angleStart, isHome){
@@ -137,6 +144,7 @@ window.initEngine = function(TEAM, opts){
       vx: Math.cos(dir)*speed,
       vy: Math.sin(dir)*speed,
       sp: BASE,                 // 该球目标速率：由 newMatch 按球队实力份额赋值（BASE=无偏置 50/50）
+      gain: 0,                  // 转向增益：由 newMatch 按球队实力份额赋值（0=无转向，仅强队有）
       spin: 0,
       spinV: (Math.random()-0.5)*4,
       score: 0
@@ -154,6 +162,8 @@ window.initEngine = function(TEAM, opts){
     const strength = computeStrength(tA, tB);
     balls[0].sp = strength.speeds[0];   // tA（主队/红）目标速率
     balls[1].sp = strength.speeds[1];   // tB（客队/蓝）目标速率
+    balls[0].gain = strength.gains[0];  // tA 转向增益（仅强队 >0）
+    balls[1].gain = strength.gains[1];  // tB 转向增益
     return {
       teams:[tA,tB],
       balls:balls,
@@ -323,7 +333,26 @@ window.initEngine = function(TEAM, opts){
   }
 
   function integrate(h){
+    // 球门中心当前角度（旋转中），门口中心点在半径 R 上；本轮子步内 rot 不变，算一次即可
+    const gc = state.goalCenter + state.rot;
+    const gcX = CX + Math.cos(gc)*R;
+    const gcY = CY + Math.sin(gc)*R;
     for(const b of state.balls){
+      // 轻量转向：把速度方向朝球门中心掰一点（仅强队有增益，且很小，只作辅助）
+      const gain = b.gain || 0;
+      if(gain > 0){
+        const cur = Math.atan2(b.vy, b.vx);
+        const target = Math.atan2(gcY - b.y, gcX - b.x);
+        const d = normAngle(target - cur);
+        const maxTurn = gain * h;
+        const turn = d > maxTurn ? maxTurn : (d < -maxTurn ? -maxTurn : d);
+        if(turn !== 0){
+          const cs = Math.cos(turn), sn = Math.sin(turn);
+          const nvx = b.vx*cs - b.vy*sn;
+          const nvy = b.vx*sn + b.vy*cs;
+          b.vx = nvx; b.vy = nvy;
+        }
+      }
       b.x += b.vx*h;
       b.y += b.vy*h;
       const sp = Math.hypot(b.vx,b.vy) || 1;
