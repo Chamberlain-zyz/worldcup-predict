@@ -10,7 +10,30 @@
 
   // ---------- 队徽工具（来自 js/badge.js）----------
   const badgeDomHTML = Badge.badgeDomHTML;
-  const TEAM = Badge.makeBadgeTeamAdapter(CLUBS);
+
+  // ---------- 球队实力评分（转向偏置用）----------
+  // 用当前所选赛季的积分 pts + 净胜球(gf-ga)*0.1 微调；按球队对象建反查表。
+  // 赛季切换时由 rebuildRatings() 重建。若所选赛季为空（新赛季全 0，尚未开赛），
+  // 回退到最近一个有数据的赛季，保证实力差异默认可见。
+  // rating 回调查不到时返回 NaN -> 引擎同样退回 50/50。
+  let ratingMap = new Map();
+  function ratingOf(t){ const v = ratingMap.get(t); return v === undefined ? NaN : v; }
+  function rebuildRatings(){
+    ratingMap = new Map();
+    let season = SEASONS[currentSeasonIdx];
+    const hasData = season.clubs.some(r => r.pld > 0);
+    if(!hasData){
+      for(let i=0;i<SEASONS.length;i++){
+        if(SEASONS[i].clubs.some(r => r.pld > 0)){ season = SEASONS[i]; break; }
+      }
+    }
+    for(const row of season.clubs){
+      const t = CLUBS[row.code];
+      if(t) ratingMap.set(t, row.pts + (row.gf - row.ga) * 0.1);
+    }
+  }
+
+  const TEAM = Badge.makeBadgeTeamAdapter(CLUBS, ratingOf);
 
   // ---------- 积分榜分区 ----------
   function zoneOf(idx, total){
@@ -104,6 +127,7 @@
   elSeasonSel.addEventListener("change", ()=>{
     currentSeasonIdx = parseInt(elSeasonSel.value, 10) || 0;
     selHome = null; selAway = null;
+    rebuildRatings();               // 实力评分随赛季切换更新
     renderStanding();               // 重建积分榜（新 DOM，高亮自然清空）
     if(!engine.isOverlayHidden()){
       engine.clearPreview();        // 未在比赛中：重置遮罩为初始提示
@@ -125,4 +149,5 @@
   });
 
   renderStanding();
+  rebuildRatings();   // 首屏按默认赛季建立实力评分
 })();

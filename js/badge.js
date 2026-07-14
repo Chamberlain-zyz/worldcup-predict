@@ -7,7 +7,8 @@
      isLight(hex)                     颜色亮度判定（决定字色黑/白）
      badgeDomHTML(team, size, cls)    DOM 版小徽章（记分牌 / 积分榜 / 结果卡 / 点球条 / 对阵行）
      drawBadgeToCanvas(ctx, team, s)  canvas 版球身（engine 已裁剪到圆内）
-     makeBadgeTeamAdapter(CLUBS)      生成 engine.js 需要的 TEAM 适配器
+     makeBadgeTeamAdapter(CLUBS, rating)  生成 engine.js 需要的 TEAM 适配器
+                                            rating(t) 可选：返回球队实力评分（不存在则引擎退回 50/50）
    ========================================================================== */
 (function(){
   "use strict";
@@ -47,8 +48,9 @@
   }
 
   // engine.js 需要的 TEAM 适配器（队徽版）
-  function makeBadgeTeamAdapter(CLUBS){
-    return {
+  // rating：可选的实力评分回调 t->number；未提供则返回的适配器不含 rating，引擎自动退回 50/50。
+  function makeBadgeTeamAdapter(CLUBS, rating){
+    const adapter = {
       all: Object.values(CLUBS),
       name: t => t.zh,
       titleName: t => t.zh,
@@ -57,6 +59,8 @@
       pensMark: t => badgeDomHTML(t, 0, "pf"),
       drawOnCanvas: (ctx, ball, R) => drawBadgeToCanvas(ctx, ball.ref, R-6),
     };
+    if(typeof rating === "function") adapter.rating = rating;
+    return adapter;
   }
 
   window.Badge = { isLight, drawBadgeToCanvas, badgeDomHTML, makeBadgeTeamAdapter };
