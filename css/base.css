@@ -221,3 +221,12 @@ button{
 }
 /* 确保遮罩内文字/按钮在彩带之上 */
 .overlay>h2,.overlay>#overlayBody,.overlay>.btn{position:relative;z-index:2}
+
+/* ---------- 队徽图片版（img.badge-img 替代字母色块 span）----------
+   各徽章类（.badge / .badge-dom / .fbadge / .pf / .mbadge）已定宽高 + 边框 + 圆角，
+   这里给图片加 contain 缩放与垂直对齐；透明 PNG 直接显示在深色底上。
+   无 logo 的队仍渲染字母色块（span，走原样式），故此处只针对 img。 */
+img.badge-img{
+  object-fit:contain;vertical-align:middle;background:transparent;
+  display:inline-block;flex:0 0 auto;
+}

@@ -25,6 +25,22 @@
 
   const TEAM = Badge.makeBadgeTeamAdapter(CLUBS, ratingOf);
 
+  // ---------- 队徽图片 ----------
+  // ucl.html 在 cups/ 下，图片相对路径 ../img/badges/<联赛>/<code>.png。
+  // 36 队跨多个联赛，仅给五大联赛图库中存在的队挂 logo；
+  // 其余队（葡体 / 布鲁日 / 加拉塔萨雷 / 卡拉巴赫 等）不挂，回退主色块 + 缩写字母。
+  const UCL_LOGO_LEAGUE = {
+    ars:"england", liv:"england", che:"england", tot:"england", mci:"england", new:"england",
+    bay:"germany", lev:"germany", bvb:"germany", fra:"germany",
+    bar:"spain",   rma:"spain",  atm:"spain",  ath:"spain",  vil:"spain",
+    int:"italy",   juv:"italy",  ata:"italy",  nap:"italy",
+    psg:"france",  mon:"france", mar:"france"
+  };
+  Object.keys(UCL_LOGO_LEAGUE).forEach(code => {
+    const t = CLUBS[code];
+    if(t) t.logo = `../img/badges/${UCL_LOGO_LEAGUE[code]}/${code}.png`;
+  });
+
   // ---------- 球队对象 -> code 反查表（CLUBS 项不含自身 code，需反查）----------
   const CODE_OF = new Map();
   Object.keys(CLUBS).forEach(k => CODE_OF.set(CLUBS[k], k));

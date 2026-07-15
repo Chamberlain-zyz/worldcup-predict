@@ -28,6 +28,10 @@
   const code = currentCode();
   const cfg = LEAGUES[code];
 
+  // 队徽图片目录：league.html 在 leagues/ 下，图片在 img/badges/<code>/，
+  // 故相对路径为 ../img/badges/<code>。standings.js 读 window.BADGE_BASE 传给适配器。
+  window.BADGE_BASE = "../img/badges/" + code;
+
   // ---------- 写入页面文案 ----------
   function setText(sel, text){ const el = document.querySelector(sel); if(el) el.textContent = text; }
   document.title = `⚽ ${cfg.zh}小游戏`;

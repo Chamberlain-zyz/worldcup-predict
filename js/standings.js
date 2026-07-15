@@ -33,7 +33,7 @@
     }
   }
 
-  const TEAM = Badge.makeBadgeTeamAdapter(CLUBS, ratingOf);
+  const TEAM = Badge.makeBadgeTeamAdapter(CLUBS, ratingOf, window.BADGE_BASE);
 
   // ---------- 积分榜分区 ----------
   function zoneOf(idx, total){
