@@ -12,7 +12,18 @@
 
   // ---------- 队徽工具（来自 js/badge.js）----------
   const badgeDomHTML = Badge.badgeDomHTML;
-  const TEAM = Badge.makeBadgeTeamAdapter(CLUBS);
+
+  // ---------- 球队实力评分（转向偏置用）----------
+  // 用联赛阶段积分 pts + 净胜球(gf-ga)*0.1 微调，按球队对象建反查表（静态，只建一次）。
+  // TBD 占位队不在表内 -> NaN -> 引擎退回 50/50。
+  const ratingMap = new Map();
+  LEAGUE.forEach(r => {
+    const t = CLUBS[r.code];
+    if(t) ratingMap.set(t, r.pts + (r.gf - r.ga) * 0.1);
+  });
+  function ratingOf(t){ const v = ratingMap.get(t); return v === undefined ? NaN : v; }
+
+  const TEAM = Badge.makeBadgeTeamAdapter(CLUBS, ratingOf);
 
   // ---------- 球队对象 -> code 反查表（CLUBS 项不含自身 code，需反查）----------
   const CODE_OF = new Map();
