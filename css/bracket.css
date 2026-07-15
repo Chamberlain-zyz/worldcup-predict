@@ -35,9 +35,12 @@
 }
 .trophy-icon{font-size:44px;line-height:1;filter:drop-shadow(0 4px 12px rgba(255,211,77,.55))}
 .trophy-title{font-size:15px;font-weight:900;letter-spacing:2px;color:var(--gold);text-shadow:0 0 12px rgba(255,211,77,.45)}
-.trophy-seat{font-size:11px;letter-spacing:2px;color:var(--gold);opacity:.85;
-  padding:3px 12px;border:1px dashed rgba(255,211,77,.4);border-radius:20px;margin-top:2px}
+.trophy-seat{display:none}
 .trophy-sub{font-size:10px;opacity:.55;letter-spacing:1px}
+.final-label{font-size:10px;letter-spacing:3px;opacity:.6;margin-top:4px}
+.final-match{margin:0;background:rgba(255,211,77,.08);border:1px solid rgba(255,211,77,.35) !important}
+.final-match .mrow{font-size:13px;gap:6px;padding:2px 0}
+.final-match .mrow .mf{width:24px;height:16px}
 
 /* ---------- 结果卡上的国旗图（大尺寸） ---------- */
 .final-team .fflag{width:62px;height:44px;object-fit:cover;border-radius:6px;
@@ -103,6 +106,7 @@
   .bracket-side{flex:0 0 auto;width:min(640px,96vw)}
   .trophy-column{flex:0 0 auto;width:min(640px,96vw);flex-direction:row;padding:10px 16px}
   .trophy-icon{font-size:32px}
+  .trophy-column .final-label,.trophy-column .final-match{display:none}
 }
 @media(max-width:900px){
   .layout{flex-direction:column;align-items:center}
