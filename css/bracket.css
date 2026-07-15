@@ -100,8 +100,9 @@
 .bracket.mirror .col.has-next .match::before{
   left:auto;right:calc(100% + 16px);border-right:none;border-left:2px solid var(--ln)
 }
-/* 下半区：队名居右，比分居左（flex 反向） */
+/* 下半区：镜像 — 比分居左、队名居右（紧贴右侧国旗） */
 .bracket.mirror .mrow{flex-direction:row-reverse}
+.bracket.mirror .mrow .mn{text-align:right}
 .bracket.mirror .mrow .ms{text-align:left}
 
 @media(max-width:1280px){
