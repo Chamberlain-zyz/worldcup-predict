@@ -75,16 +75,16 @@
       <div class="trophy-icon">🏆</div>
       <div class="trophy-title">世界杯冠军</div>
       <div class="final-label">— 决赛 —</div>
-      <div class="match final-match" style="cursor:default;width:100%">
-        <div class="mrow win">
+      <button class="match final-match" style="width:100%" data-a="Spain|es|🇪🇸" data-b="Argentina|ar|🇦🇷">
+        <div class="mrow">
           <img class="mf" src="https://flagcdn.com/es.svg" alt="🇪🇸">
           <span class="mn">西班牙</span>
         </div>
-        <div class="mrow tbd">
-          <span class="mf" style="display:inline-block;text-align:center;font-size:13px;opacity:.7">❓</span>
-          <span class="mn">待定</span>
+        <div class="mrow">
+          <img class="mf" src="https://flagcdn.com/ar.svg" alt="🇦🇷">
+          <span class="mn">阿根廷</span>
         </div>
-      </div>
+      </button>
       <div class="trophy-sub">2026 美加墨</div>
     </div>
 
@@ -200,7 +200,7 @@ const BRACKET = {
       {round:"1/4决赛", a:NOR, b:ENG, winner:"b", scoreA:1, scoreB:2},   // 挪威 vs 英格兰（英格兰晋级）
       {round:"1/4决赛", a:ARG, b:SUI, winner:"a", scoreA:3, scoreB:1},   // 阿根廷 3-1 瑞士（阿根廷晋级）
       // 半决赛
-      {round:"半决赛", a:ENG, b:ARG, winner:null}
+      {round:"半决赛", a:ENG, b:ARG, winner:"b", scoreA:1, scoreB:2}   // 英格兰 1-2 阿根廷（阿根廷晋级决赛）
     ]
   };
 const NAME_ZH = {
