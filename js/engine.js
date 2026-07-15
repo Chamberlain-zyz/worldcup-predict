@@ -69,10 +69,10 @@ window.initEngine = function(TEAM, opts){
   //   2) 转向为辅：强队球每帧把速度方向朝球门中心轻掰一点（STEER_MAX 很小，仅辅助，几乎看不出“找门”）。
   // 只改速率+轻量方向、不改进球判定。势均力敌时与原引擎完全一致。速率关于 BASE 对称，平均节奏不变。
   const BASE = 480;           // 基础速率（= TARGET_SP）。势均力敌时两队都用此速率
-  const RATING_D  = 40;        // Elo 分母：越大越接近 50/50，越小差距拉得越开（主手感旋钮）
+  const RATING_D  = 35;        // Elo 分母：越大越接近 50/50，越小差距拉得越开（主手感旋钮）
   const UPSET     = 0.30;     // 冷门旋钮(0~1)：把强队份额往 0.5 拉，保留爆冷空间
   const SPREAD    = 192;      // 最大速率差幅度：强队 BASE+SPREAD、弱队 BASE-SPREAD（±40%，差距明显但弱队不致过慢）
-  const STEER_MAX = 0.15;     // 强队最大转向增益（rad/s，仅辅助）：很轻，约为纯转向方案的 1/7，几乎看不出“找门”
+  const STEER_MAX = 0.3;     // 强队最大转向增益（rad/s，仅辅助）：很轻，约为纯转向方案的 1/7，几乎看不出“找门”
   const PEN_RATING_AMP = 0.15; // 点球命中率按实力份额浮动幅度（次要，常规时间速率差优先）
 
   const PEN_GOAL_P = 0.72,
