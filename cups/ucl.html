@@ -146,31 +146,31 @@ const CLUBS = {
     kai:{short:"Kairat",         zh:"海拉提",       c1:"#1d4ed8", c2:"#ffd700", abbr:"KAI"}
   };
 
-// 淘汰赛对阵（scoreA/B = 两回合总比分；决赛为单场；legs = 鼠标悬停提示的两回合明细）
+// 淘汰赛对阵（s1A/s1B = 首回合比分；s2A/s2B = 次回合比分；决赛为单场 scoreA/scoreB；legs = 中文明细 tooltip）
 const BRACKET = {
     top:[
       // 16 强赛
-      {round:"16强赛", a:CLUBS.psg, b:CLUBS.che, winner:"a", scoreA:8, scoreB:2,  legs:"巴黎 5-2 切尔西 · 次回合 巴黎 3-0 切尔西"},
-      {round:"16强赛", a:CLUBS.gal, b:CLUBS.liv, winner:"b", scoreA:1, scoreB:4,  legs:"加拉塔 1-0 利物浦 · 次回合 加拉塔 0-4 利物浦"},
-      {round:"16强赛", a:CLUBS.rma, b:CLUBS.mci, winner:"a", scoreA:5, scoreB:1,  legs:"皇马 3-0 曼城 · 次回合 皇马 2-1 曼城"},
-      {round:"16强赛", a:CLUBS.ata, b:CLUBS.bay, winner:"b", scoreA:2, scoreB:10, legs:"亚特兰大 1-6 拜仁 · 次回合 亚特兰大 1-4 拜仁"},
+      {round:"16强赛", a:CLUBS.psg, b:CLUBS.che, winner:"a", s1A:5,s1B:2, s2A:3,s2B:0, legs:"巴黎 5-2 切尔西 · 次回合 巴黎 3-0 切尔西"},
+      {round:"16强赛", a:CLUBS.gal, b:CLUBS.liv, winner:"b", s1A:1,s1B:0, s2A:0,s2B:4, legs:"加拉塔 1-0 利物浦 · 次回合 加拉塔 0-4 利物浦"},
+      {round:"16强赛", a:CLUBS.rma, b:CLUBS.mci, winner:"a", s1A:3,s1B:0, s2A:2,s2B:1, legs:"皇马 3-0 曼城 · 次回合 皇马 2-1 曼城"},
+      {round:"16强赛", a:CLUBS.ata, b:CLUBS.bay, winner:"b", s1A:1,s1B:6, s2A:1,s2B:4, legs:"亚特兰大 1-6 拜仁 · 次回合 亚特兰大 1-4 拜仁"},
       // 1/4 决赛
-      {round:"1/4决赛", a:CLUBS.psg, b:CLUBS.liv, winner:"a", scoreA:4, scoreB:0,  legs:"巴黎 2-0 利物浦 · 次回合 巴黎 2-0 利物浦"},
-      {round:"1/4决赛", a:CLUBS.rma, b:CLUBS.bay, winner:"b", scoreA:4, scoreB:6,  legs:"皇马 1-2 拜仁 · 次回合 皇马 3-4 拜仁"},
+      {round:"1/4决赛", a:CLUBS.psg, b:CLUBS.liv, winner:"a", s1A:2,s1B:0, s2A:2,s2B:0, legs:"巴黎 2-0 利物浦 · 次回合 巴黎 2-0 利物浦"},
+      {round:"1/4决赛", a:CLUBS.rma, b:CLUBS.bay, winner:"b", s1A:1,s1B:2, s2A:3,s2B:4, legs:"皇马 1-2 拜仁 · 次回合 皇马 3-4 拜仁"},
       // 半决赛
-      {round:"半决赛", a:CLUBS.psg, b:CLUBS.bay, winner:"a", scoreA:6, scoreB:5,  legs:"巴黎 5-4 拜仁 · 次回合 巴黎 1-1 拜仁"}
+      {round:"半决赛", a:CLUBS.psg, b:CLUBS.bay, winner:"a", s1A:5,s1B:4, s2A:1,s2B:1, legs:"巴黎 5-4 拜仁 · 次回合 巴黎 1-1 拜仁"}
     ],
     bottom:[
       // 16 强赛
-      {round:"16强赛", a:CLUBS.new, b:CLUBS.bar, winner:"b", scoreA:3, scoreB:8,  legs:"纽卡 1-1 巴萨 · 次回合 纽卡 2-7 巴萨"},
-      {round:"16强赛", a:CLUBS.atm, b:CLUBS.tot, winner:"a", scoreA:7, scoreB:5,  legs:"马竞 5-2 热刺 · 次回合 马竞 2-3 热刺"},
-      {round:"16强赛", a:CLUBS.gli, b:CLUBS.spo, winner:"b", scoreA:3, scoreB:5,  legs:"博多 3-0 葡体 · 次回合 博多 0-5 葡体(加时)"},
-      {round:"16强赛", a:CLUBS.lev, b:CLUBS.ars, winner:"b", scoreA:1, scoreB:3,  legs:"勒沃 1-1 阿森纳 · 次回合 勒沃 0-2 阿森纳"},
+      {round:"16强赛", a:CLUBS.new, b:CLUBS.bar, winner:"b", s1A:1,s1B:1, s2A:2,s2B:7, legs:"纽卡 1-1 巴萨 · 次回合 纽卡 2-7 巴萨"},
+      {round:"16强赛", a:CLUBS.atm, b:CLUBS.tot, winner:"a", s1A:5,s1B:2, s2A:2,s2B:3, legs:"马竞 5-2 热刺 · 次回合 马竞 2-3 热刺"},
+      {round:"16强赛", a:CLUBS.gli, b:CLUBS.spo, winner:"b", s1A:3,s1B:0, s2A:0,s2B:5, legs:"博多 3-0 葡体 · 次回合 博多 0-5 葡体(加时)"},
+      {round:"16强赛", a:CLUBS.lev, b:CLUBS.ars, winner:"b", s1A:1,s1B:1, s2A:0,s2B:2, legs:"勒沃 1-1 阿森纳 · 次回合 勒沃 0-2 阿森纳"},
       // 1/4 决赛
-      {round:"1/4决赛", a:CLUBS.bar, b:CLUBS.atm, winner:"b", scoreA:2, scoreB:3,  legs:"巴萨 0-2 马竞 · 次回合 巴萨 2-1 马竞"},
-      {round:"1/4决赛", a:CLUBS.spo, b:CLUBS.ars, winner:"b", scoreA:0, scoreB:1,  legs:"葡体 0-1 阿森纳 · 次回合 葡体 0-0 阿森纳"},
+      {round:"1/4决赛", a:CLUBS.bar, b:CLUBS.atm, winner:"b", s1A:0,s1B:2, s2A:2,s2B:1, legs:"巴萨 0-2 马竞 · 次回合 巴萨 2-1 马竞"},
+      {round:"1/4决赛", a:CLUBS.spo, b:CLUBS.ars, winner:"b", s1A:0,s1B:1, s2A:0,s2B:0, legs:"葡体 0-1 阿森纳 · 次回合 葡体 0-0 阿森纳"},
       // 半决赛
-      {round:"半决赛", a:CLUBS.atm, b:CLUBS.ars, winner:"b", scoreA:1, scoreB:2,  legs:"马竞 1-1 阿森纳 · 次回合 马竞 0-1 阿森纳"}
+      {round:"半决赛", a:CLUBS.atm, b:CLUBS.ars, winner:"b", s1A:1,s1B:1, s2A:0,s2B:1, legs:"马竞 1-1 阿森纳 · 次回合 马竞 0-1 阿森纳"}
     ]
   };
 

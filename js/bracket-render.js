@@ -40,11 +40,20 @@
       const wa = m.winner === 'a', wb = m.winner === 'b';
       const clsA = aTBD ? "tbd" : (wa ? "win" : (wb ? "lose" : ""));
       const clsB = bTBD ? "tbd" : (wb ? "win" : (wa ? "lose" : ""));
+      const sa1 = (!aTBD && m.s1A != null) ? m.s1A : "";
+      const sa2 = (!aTBD && m.s2A != null) ? m.s2A : "";
       const sa = (!aTBD && m.scoreA != null) ? (m.penA != null ? `${m.scoreA}(${m.penA})` : m.scoreA) : "";
+      const sb1 = (!bTBD && m.s1B != null) ? m.s1B : "";
+      const sb2 = (!bTBD && m.s2B != null) ? m.s2B : "";
       const sb = (!bTBD && m.scoreB != null) ? (m.penB != null ? `${m.scoreB}(${m.penB})` : m.scoreB) : "";
       const tipAttr = tipOf ? ` title="${tipOf(m)}"` : "";
-      const rowA = `<div class="mrow ${clsA}"${tipAttr}>${teamMark(m.a)}<span class="mn">${teamName(m.a)}</span><span class="ms">${sa}</span></div>`;
-      const rowB = `<div class="mrow ${clsB}"${tipAttr}>${teamMark(m.b)}<span class="mn">${teamName(m.b)}</span><span class="ms">${sb}</span></div>`;
+      const hasTwo = m.s1A != null;   // 双回合模式
+      const rowA = hasTwo
+        ? `<div class="mrow ${clsA}"${tipAttr}>${teamMark(m.a)}<span class="mn">${teamName(m.a)}</span><span class="ms">${sa1}</span><span class="ms">${sa2}</span></div>`
+        : `<div class="mrow ${clsA}"${tipAttr}>${teamMark(m.a)}<span class="mn">${teamName(m.a)}</span><span class="ms">${sa}</span></div>`;
+      const rowB = hasTwo
+        ? `<div class="mrow ${clsB}"${tipAttr}>${teamMark(m.b)}<span class="mn">${teamName(m.b)}</span><span class="ms">${sb1}</span><span class="ms">${sb2}</span></div>`
+        : `<div class="mrow ${clsB}"${tipAttr}>${teamMark(m.b)}<span class="mn">${teamName(m.b)}</span><span class="ms">${sb}</span></div>`;
       return rowA + rowB;
     }
 
