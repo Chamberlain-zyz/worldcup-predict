@@ -49,7 +49,7 @@ window.initEngine = function(TEAM, opts){
   const CX = W/2, CY = H/2;
   const R = 290;
   const BALL_R = 38;
-  const GOAL_SPAN = 0.32;
+  const GOAL_SPAN = 0.35;
 
   // ---------- 配置 / 常量 ----------
   const ALLOW_EXTRA = opts.allowExtra !== false;
@@ -68,7 +68,7 @@ window.initEngine = function(TEAM, opts){
   //   1) 速度差异为主：强队球更快 -> 更频繁撞墙 -> 进球更多；
   //   2) 转向为辅：强队球每帧把速度方向朝球门中心轻掰一点（STEER_MAX 很小，仅辅助，几乎看不出“找门”）。
   // 只改速率+轻量方向、不改进球判定。势均力敌时与原引擎完全一致。速率关于 BASE 对称，平均节奏不变。
-  const BASE = 480;           // 基础速率（= TARGET_SP）。势均力敌时两队都用此速率
+  const BASE = 500;           // 基础速率（= TARGET_SP）。势均力敌时两队都用此速率
   const RATING_D  = 35;        // Elo 分母：越大越接近 50/50，越小差距拉得越开（主手感旋钮）
   const UPSET     = 0.30;     // 冷门旋钮(0~1)：把强队份额往 0.5 拉，保留爆冷空间
   const SPREAD    = 192;      // 最大速率差幅度：强队 BASE+SPREAD、弱队 BASE-SPREAD（±40%，差距明显但弱队不致过慢）
