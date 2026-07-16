@@ -64,7 +64,6 @@
 
   // ---------- 初始化引擎（世界杯：无积分榜选队，故无清选队回调 / 无取消预览）----------
   const engine = initEngine(TEAM, {});
-  engine.previewMatch(ENG, FRA);   // 默认加载季军赛：英格兰 vs 法国
 
   // ---------- 对阵图渲染（复用 js/bracket-render.js 公共模块）----------
   // 队伍标识为数组 [英文名, ISO代码, emoji]，占位队 ISO 代码为 "_tbd"。
